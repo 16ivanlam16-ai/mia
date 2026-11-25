@@ -1,0 +1,154 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { guides } from "../../content/guides";
+import { messages } from "../../i18n";
+import { loadCards } from "../../lib/cards";
+import { serializeJson } from "../../lib/text";
+import { isLang, localePaths, type Lang } from "../../lib/taxonomy";
+import { absoluteUrl, pagePath } from "../../lib/urls";
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const lang = Astro.params.lang as Lang;
+if (!isLang(lang)) throw new Error("Unsupported language");
+const t = messages[lang];
+const cards = loadCards();
+const published = cards.filter((card) => card.status === "published").length;
+const samples = cards.length - published;
+const home = pagePath(lang);
+const site = Astro.site ?? new URL("https://16ivanlam16-ai.github.io");
+const website = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Mia",
+  url: absoluteUrl(site, home),
+  inLanguage: ["zh-Hant-HK", "zh-Hans"],
+  description: t.seo.home,
+};
+---
+
+<BaseLayout lang={lang} title={t.home.title} description={t.seo.home} path="">
+  <script type="application/ld+json" set:html={serializeJson(website)} />
+  <section class="wrap hero">
+    <div>
+      <p class="eyebrow">{t.home.eyebrow}</p>
+      <h1>{t.home.title}</h1>
+      <div class="copy-pending">
+        <p class="tag">{t.copyBadge}</p>
+        <p class="lede">{t.home.lede}</p>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" href={pagePath(lang, "compare")}>{t.cta.compare}</a>
+        <a class="btn btn-secondary" href={pagePath(lang, "claims")}>{t.cta.claims}</a>
+      </div>
+      <dl class="stats">
+        <div>
+          <dt>{t.home.statSamples}</dt>
+          <dd>{samples}</dd>
+        </div>
+        <div>
+          <dt>{t.home.statPublished}</dt>
+          <dd>{published}</dd>
+        </div>
+        <div>
+          <dt>{t.home.statLanguages}</dt>
+          <dd>繁 / 简</dd>
+        </div>
+      </dl>
+    </div>
+    <div class="specimen-stage" aria-hidden="true">
+      <div class="specimen-back"></div>
+      <div class="specimen">
+        <div class="specimen-top">
+          <span>{t.card.eyebrowPlaceholder}</span>
+          <span class="mark">SAMPLE</span>
+        </div>
+        <div class="specimen-rows">
+          <div>
+            <span class="lbl">{t.facts.annualFee}</span>
+            <span class="ph ph-inverse">{t.placeholder}</span>
+          </div>
+          <div>
+            <span class="lbl">{t.facts.earn}</span>
+            <span class="ph ph-inverse">{t.placeholder}</span>
+          </div>
+          <div>
+            <span class="lbl">{t.facts.welcome}</span>
+            <span class="ph ph-inverse">{t.placeholder}</span>
+          </div>
+          <div>
+            <span class="lbl">{t.facts.apr}</span>
+            <span class="ph ph-inverse">{t.placeholder}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section">
+    <h2>{t.home.principlesTitle}</h2>
+    <ol class="grid-3">
+      {
+        t.home.principles.map((item, index) => (
+          <li class="panel">
+            <span class="index">0{index + 1}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="wrap section">
+    <h2>{t.home.audienceTitle}</h2>
+    <ul class="grid-3">
+      {
+        t.home.audiences.map((item) => (
+          <li class="panel">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="wrap section">
+    <div class="section-head">
+      <h2>{t.home.guidesTitle}</h2>
+      <a href={pagePath(lang, "guides")}>{t.cta.allGuides}</a>
+    </div>
+    <p class="note">{t.home.guidesLede}</p>
+    <ul class="guide-grid">
+      {
+        guides.map((guide) => (
+          <li>
+            <a class="panel panel-link" href={pagePath(lang, `guides/${guide.slug}`)}>
+              <h3>{guide.title[lang]}</h3>
+              <p>{guide.description[lang]}</p>
+              <span>{t.guides.read}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="wrap section split">
+    <div class="panel">
+      <h2>{t.home.claimsTitle}</h2>
+      <p>{t.home.claimsLede}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href={pagePath(lang, "claims")}>{t.cta.claims}</a>
+      </div>
+    </div>
+    <div class="panel panel-ink">
+      <h2>{t.home.trustTitle}</h2>
+      <p>{t.home.trustBody}</p>
+      <p><a href={pagePath(lang, "not-financial-advice")}>{t.legalNav.advice}</a></p>
+    </div>
+  </section>
+</BaseLayout>

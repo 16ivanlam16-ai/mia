@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { messages } from "../i18n";
+import { pagePath } from "../lib/urls";
+
+const hant = messages["zh-hant"].notFound;
+const hans = messages["zh-hans"].notFound;
+---
+
+<BaseLayout
+  lang="zh-hant"
+  title={hant.title}
+  description={hant.body}
+  pageId="404"
+  noindex
+  omitAlternates
+>
+  <div class="wrap page-hero">
+    <h1>{hant.title}</h1>
+    <p>{hant.body}</p>
+    <h1>{hans.title}</h1>
+    <p>{hans.body}</p>
+    <div class="actions">
+      <a class="btn btn-primary" href={pagePath("zh-hant")}>{hant.home}</a>
+      <a class="btn btn-secondary" href={pagePath("zh-hans")}>{hans.home}</a>
+    </div>
+  </div>
+</BaseLayout>

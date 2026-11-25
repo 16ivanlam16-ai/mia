@@ -1,0 +1,87 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import ClaimCard from "../../components/ClaimCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { messages } from "../../i18n";
+import { loadClaims } from "../../lib/claims";
+import { isLang, localePaths, type Lang } from "../../lib/taxonomy";
+import { pagePath } from "../../lib/urls";
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const lang = Astro.params.lang as Lang;
+if (!isLang(lang)) throw new Error("Unsupported language");
+const t = messages[lang];
+const claims = loadClaims();
+const samples = claims.filter((claim) => claim.isSample);
+---
+
+<BaseLayout lang={lang} title={t.claims.title} description={t.seo.claims} path="claims">
+  <div
+    class="wrap"
+    data-claims
+    data-result-title={t.claims.resultTitle}
+    data-not-found={t.claims.notFound}
+    data-invalid={t.claims.invalid}
+  >
+    <header class="page-hero">
+      <Breadcrumbs
+        label={t.a11y.breadcrumb}
+        items={[
+          { label: t.nav.home, href: pagePath(lang) },
+          { label: t.claims.title },
+        ]}
+      />
+      <p class="eyebrow">{t.claims.eyebrow}</p>
+      <h1>{t.claims.title}</h1>
+      <p class="lede">{t.claims.lede}</p>
+    </header>
+    <form>
+      <label for="claim-ref">{t.claims.label}</label>
+      <div class="inline-form">
+        <input
+          id="claim-ref"
+          name="ref"
+          type="text"
+          maxlength="40"
+          spellcheck="false"
+          autocapitalize="characters"
+          autocomplete="off"
+          placeholder={t.claims.fieldPlaceholder}
+        />
+        <button class="btn btn-primary" type="submit">{t.claims.submit}</button>
+      </div>
+    </form>
+    <div class="claim-result" data-claim-result hidden aria-live="polite"></div>
+    <h2>{t.claims.samplesTitle}</h2>
+    <p class="note">{t.claims.samplesHelp}</p>
+    <ul class="sample-refs">
+      {
+        samples.map((claim) => (
+          <li>
+            <button type="button" data-sample-ref={claim.reference}>
+              {claim.reference}
+            </button>
+            <span class={`status status-${claim.status}`}>{t.status[claim.status]}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="note">{t.claims.privacy}</p>
+    <noscript><p class="note">{t.claims.noscript}</p></noscript>
+    <div class="claim-store" data-claim-store>
+      {claims.map((claim) => <ClaimCard claim={claim} lang={lang} t={t} />)}
+    </div>
+    <noscript>
+      <style>
+        .claim-store { display: block !important; }
+        .claim-store .claim-card { margin-top: 0.8rem; }
+      </style>
+    </noscript>
+  </div>
+  <script>
+    import "../../scripts/claims.ts";
+  </script>
+</BaseLayout>

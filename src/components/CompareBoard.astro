@@ -1,0 +1,192 @@
+---
+import Term from "./Term.astro";
+import type { Card } from "../lib/cards";
+import { formatHkd } from "../lib/format";
+import { fill } from "../lib/text";
+import type { Messages } from "../i18n";
+import { AUDIENCES, NETWORKS, REWARD_TYPES, type Lang } from "../lib/taxonomy";
+import { goPath, pagePath } from "../lib/urls";
+
+interface Props {
+  lang: Lang;
+  cards: Card[];
+  t: Messages;
+}
+const { lang, cards, t } = Astro.props;
+
+function present<T extends string>(order: readonly T[], values: Array<T | null | undefined>): T[] {
+  const found = new Set(values.filter((value): value is T => Boolean(value)));
+  return order.filter((item) => found.has(item));
+}
+
+const rewards = present(REWARD_TYPES, cards.map((card) => card.rewardType));
+const networks = present(NETWORKS, cards.map((card) => card.network));
+const audiences = present(AUDIENCES, cards.flatMap((card) => card.audiences));
+
+function searchText(card: Card): string {
+  return [
+    card.id,
+    card.issuerCode,
+    card.issuerName["zh-hant"],
+    card.issuerName["zh-hans"],
+    card.productName["zh-hant"],
+    card.productName["zh-hans"],
+    card.rewardType ?? "",
+    card.network ?? "",
+    ...card.audiences,
+  ].join(" ");
+}
+
+function income(card: Card): string | null {
+  if (card.minIncomeHkd === null) return null;
+  return card.minIncomePeriod
+    ? `${formatHkd(card.minIncomeHkd)} / ${t.incomePeriod[card.minIncomePeriod]}`
+    : formatHkd(card.minIncomeHkd);
+}
+---
+
+<div class="compare-board" data-compare data-total={cards.length} data-count-template={t.compare.count}>
+  <form class="filters" data-compare-form>
+    <div class="field field-grow">
+      <label for="q">{t.compare.searchLabel}</label>
+      <input id="q" name="q" type="search" placeholder={t.compare.searchPlaceholder} autocomplete="off" />
+    </div>
+    <div class="field">
+      <label for="reward">{t.compare.reward}</label>
+      <select id="reward" name="reward">
+        <option value="">{t.compare.any}</option>
+        {rewards.map((item) => <option value={item}>{t.reward[item]}</option>)}
+      </select>
+    </div>
+    <div class="field">
+      <label for="network">{t.compare.network}</label>
+      <select id="network" name="network">
+        <option value="">{t.compare.any}</option>
+        {networks.map((item) => <option value={item}>{t.network[item]}</option>)}
+      </select>
+    </div>
+    <div class="field">
+      <label for="audience">{t.compare.audience}</label>
+      <select id="audience" name="audience">
+        <option value="">{t.compare.any}</option>
+        {audiences.map((item) => <option value={item}>{t.audience[item]}</option>)}
+      </select>
+    </div>
+  <div class="filter-bar">
+    <label class="check">
+      <input name="live" type="checkbox" />
+      {t.compare.liveOnly}
+    </label>
+    <button class="btn btn-secondary" type="button" data-clear>{t.compare.clear}</button>
+    <p class="count">
+      <span data-compare-count>{fill(t.compare.count, { shown: cards.length, total: cards.length })}</span>
+    </p>
+  </div>
+  </form>
+  <noscript><p class="note">{t.compare.noscript}</p></noscript>
+  <p class="empty" data-compare-empty hidden>{t.compare.empty}</p>
+
+  <div class="table-scroll only-desktop">
+    <table class="compare">
+      <caption>{t.compare.caption}</caption>
+      <thead>
+        <tr>
+          <th scope="col">{t.facts.card}</th>
+          <th scope="col">{t.facts.reward}</th>
+          <th scope="col">{t.facts.audience}</th>
+          <th scope="col">{t.facts.annualFee}</th>
+          <th scope="col">{t.facts.income}</th>
+          <th scope="col">{t.facts.earn}</th>
+          <th scope="col">{t.facts.welcome}</th>
+          <th scope="col">{t.card.applyTitle}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          cards.map((card) => (
+            <tr
+              data-card-id={card.id}
+              data-status={card.status}
+              data-reward={card.rewardType ?? ""}
+              data-network={card.network ?? ""}
+              data-audiences={card.audiences.join(" ")}
+              data-text={searchText(card)}
+            >
+              <th scope="row">
+                <a class="card-name" href={pagePath(lang, `cards/${card.id}`)}>
+                  {card.productName[lang]}
+                </a>
+                <span class="issuer">{card.issuerName[lang]}</span>
+              </th>
+              <td>{card.rewardType ? t.reward[card.rewardType] : <Term value={null} placeholder={t.placeholder} title={t.placeholderTitle} />}</td>
+              <td>{card.audiences.map((item) => t.audience[item]).join(" · ")}</td>
+              <td><Term value={card.annualFeeHkd === null ? null : formatHkd(card.annualFeeHkd)} placeholder={t.placeholder} title={t.placeholderTitle} numeric /></td>
+              <td><Term value={income(card)} placeholder={t.placeholder} title={t.placeholderTitle} numeric /></td>
+              <td><Term value={card.earnRate?.[lang] ?? null} placeholder={t.placeholder} title={t.placeholderTitle} /></td>
+              <td><Term value={card.welcomeOffer?.[lang] ?? null} placeholder={t.placeholder} title={t.placeholderTitle} /></td>
+              <td>
+                <a class="btn btn-secondary" href={goPath(card.id, { channel: "site", post: "compare", lang })} data-astro-prefetch="false">
+                  {card.applyUrl ? t.cta.applyReady : t.cta.applyPending}
+                </a>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <div class="deal-list">
+    {
+      cards.map((card) => (
+        <article
+          class="deal"
+          data-card-id={card.id}
+          data-status={card.status}
+          data-reward={card.rewardType ?? ""}
+          data-network={card.network ?? ""}
+          data-audiences={card.audiences.join(" ")}
+          data-text={searchText(card)}
+        >
+          <h2>
+            <a href={pagePath(lang, `cards/${card.id}`)}>{card.productName[lang]}</a>
+          </h2>
+          <p class="issuer">{card.issuerName[lang]}</p>
+          <dl class="spec-grid">
+            <div>
+              <dt>{t.facts.reward}</dt>
+              <dd>{card.rewardType ? t.reward[card.rewardType] : <Term value={null} placeholder={t.placeholder} title={t.placeholderTitle} />}</dd>
+            </div>
+            <div>
+              <dt>{t.facts.audience}</dt>
+              <dd>{card.audiences.map((item) => t.audience[item]).join(" · ")}</dd>
+            </div>
+            <div>
+              <dt>{t.facts.annualFee}</dt>
+              <dd><Term value={card.annualFeeHkd === null ? null : formatHkd(card.annualFeeHkd)} placeholder={t.placeholder} title={t.placeholderTitle} numeric /></dd>
+            </div>
+            <div>
+              <dt>{t.facts.income}</dt>
+              <dd><Term value={income(card)} placeholder={t.placeholder} title={t.placeholderTitle} numeric /></dd>
+            </div>
+            <div>
+              <dt>{t.facts.earn}</dt>
+              <dd><Term value={card.earnRate?.[lang] ?? null} placeholder={t.placeholder} title={t.placeholderTitle} /></dd>
+            </div>
+            <div>
+              <dt>{t.facts.welcome}</dt>
+              <dd><Term value={card.welcomeOffer?.[lang] ?? null} placeholder={t.placeholder} title={t.placeholderTitle} /></dd>
+            </div>
+          </dl>
+          <a class="btn btn-secondary" href={goPath(card.id, { channel: "site", post: "compare", lang })} data-astro-prefetch="false">
+            {card.applyUrl ? t.cta.applyReady : t.cta.applyPending}
+          </a>
+        </article>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  import "../scripts/compare.ts";
+</script>

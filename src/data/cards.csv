@@ -1,0 +1,11 @@
+# Mia card matrix. Replace this file with the marketing export. Do not rename columns.
+# status=placeholder rows must leave every commercial column blank. Those cells render as 待補 / 待补.
+# status=published rows need updated_at (YYYY-MM-DD), source notes, and at least one term or https apply_url.
+# audiences and highlights use the pipe character |. Amounts are whole HKD with no symbols.
+# min_income_period is monthly or annual. Do not put personal data in this file.
+# Blank does not mean zero. Do not type 0 unless the published term really is zero.
+id,status,issuer_code,issuer_name_zh_hant,issuer_name_zh_hans,product_name_zh_hant,product_name_zh_hans,network,audiences,reward_type,annual_fee_hkd,annual_fee_waiver_zh_hant,annual_fee_waiver_zh_hans,min_income_hkd,min_income_period,earn_rate_zh_hant,earn_rate_zh_hans,welcome_offer_zh_hant,welcome_offer_zh_hans,interest_rate_apr,foreign_txn_fee,apply_url,summary_zh_hant,summary_zh_hans,highlights_zh_hant,highlights_zh_hans,updated_at,source_note_zh_hant,source_note_zh_hans
+sample-cashback,placeholder,sample-issuer,範例銀行,示例银行,回贈結構樣本,回赠结构样本,visa,hk-local|new-arrival,cashback,,,,,,,,,,,,,用來示範比較表怎樣排一張回贈卡。這不是真實產品。,用来演示比较表如何排列一张回赠卡。这不是真实产品。,結構樣本|商業條款留空|申請網址未填,结构样本|商业条款留空|申请网址未填,,非銀行文件。待市場部矩陣取代。,非银行文件。待市场部矩阵取代。
+sample-miles,placeholder,sample-issuer,範例銀行,示例银行,里數結構樣本,里程结构样本,mastercard,hk-local,miles,,,,,,,,,,,,,用來示範里數卡在表上的位置。沒有任何里數換算或優惠。,用来演示里程卡在表上的位置。没有任何里程换算或优惠。,結構樣本|商業條款留空|申請網址未填,结构样本|商业条款留空|申请网址未填,,非銀行文件。待市場部矩陣取代。,非银行文件。待市场部矩阵取代。
+sample-newcomer,placeholder,sample-issuer,範例銀行,示例银行,新來港結構樣本,新来港结构样本,unionpay,ttps|iang|qmas|new-arrival,points,,,,,,,,,,,,,用來示範高才通、IANG 與優才標籤如何掛在同一張卡上。不是申請條件。,用来演示高才通、IANG 与优才标签如何挂在同一张卡上。不是申请条件。,結構樣本|商業條款留空|申請網址未填,结构样本|商业条款留空|申请网址未填,,非銀行文件。待市場部矩陣取代。,非银行文件。待市场部矩阵取代。
+sample-student,placeholder,sample-issuer,範例銀行,示例银行,學生結構樣本,学生结构样本,visa,student,hybrid,,,,,,,,,,,,,用來示範學生標籤與混合獎賞欄。沒有學生優惠內容。,用来演示学生标签与混合奖赏栏。没有学生优惠内容。,結構樣本|商業條款留空|申請網址未填,结构样本|商业条款留空|申请网址未填,,非銀行文件。待市場部矩陣取代。,非银行文件。待市场部矩阵取代。

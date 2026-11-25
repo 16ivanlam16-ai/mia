@@ -1,0 +1,41 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { messages } from "../../i18n";
+import { isLang, localePaths, type Lang } from "../../lib/taxonomy";
+import { pagePath } from "../../lib/urls";
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const lang = Astro.params.lang as Lang;
+if (!isLang(lang)) throw new Error("Unsupported language");
+const t = messages[lang];
+---
+
+<BaseLayout lang={lang} title={t.about.title} description={t.seo.about} path="about">
+  <article class="wrap prose">
+    <Breadcrumbs
+      label={t.a11y.breadcrumb}
+      items={[
+        { label: t.nav.home, href: pagePath(lang) },
+        { label: t.about.title },
+      ]}
+    />
+    <p class="eyebrow">{t.about.eyebrow}</p>
+    <h1>{t.about.title}</h1>
+    <div class="copy-pending">
+      <p class="tag">{t.copyBadge}</p>
+      <p class="lede">{t.about.lede}</p>
+      {
+        t.about.sections.map((section) => (
+          <section>
+            <h2>{section.heading}</h2>
+            {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </section>
+        ))
+      }
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,46 @@
+---
+import Breadcrumbs from "./Breadcrumbs.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { legalDocs, type LegalSlug } from "../content/legal";
+import { messages } from "../i18n";
+import { loadProfile } from "../lib/profile";
+import { fill } from "../lib/text";
+import type { Lang } from "../lib/taxonomy";
+import { pagePath } from "../lib/urls";
+
+interface Props {
+  lang: Lang;
+  slug: LegalSlug;
+}
+const { lang, slug } = Astro.props;
+const t = messages[lang];
+const doc = legalDocs[slug][lang];
+const profile = loadProfile();
+const home = pagePath(lang);
+---
+
+<BaseLayout lang={lang} title={doc.title} description={doc.description} path={slug}>
+  <article class="wrap prose">
+    <Breadcrumbs
+      label={t.a11y.breadcrumb}
+      items={[
+        { label: t.nav.home, href: home },
+        { label: doc.title },
+      ]}
+    />
+    <p class="eyebrow">{t.legal.eyebrow}</p>
+    <h1>{doc.title}</h1>
+    <p class="draft-banner">{t.legal.draft}</p>
+    <p class="meta-line">{t.legal.draftDate}</p>
+    <p>{profile.legalEntityName ? fill(t.legal.entity, { name: profile.legalEntityName }) : t.legal.entityPending}</p>
+    <p class="lede">{doc.intro}</p>
+    {
+      doc.sections.map((section) => (
+        <section>
+          <h2>{section.heading}</h2>
+          {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </section>
+      ))
+    }
+  </article>
+</BaseLayout>

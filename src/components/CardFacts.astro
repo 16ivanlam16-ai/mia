@@ -1,0 +1,48 @@
+---
+import Term from "./Term.astro";
+import type { Card } from "../lib/cards";
+import { formatHkd } from "../lib/format";
+import type { Messages } from "../i18n";
+import type { Lang } from "../lib/taxonomy";
+
+interface Props {
+  card: Card;
+  lang: Lang;
+  t: Messages;
+}
+const { card, lang, t } = Astro.props;
+const income =
+  card.minIncomeHkd === null
+    ? null
+    : card.minIncomePeriod
+      ? `${formatHkd(card.minIncomeHkd)} / ${t.incomePeriod[card.minIncomePeriod]}`
+      : formatHkd(card.minIncomeHkd);
+const rows: { label: string; value: string | null; numeric?: boolean }[] = [
+  { label: t.facts.issuer, value: card.issuerName[lang] },
+  { label: t.facts.network, value: card.network ? t.network[card.network] : null },
+  { label: t.facts.reward, value: card.rewardType ? t.reward[card.rewardType] : null },
+  { label: t.facts.annualFee, value: card.annualFeeHkd === null ? null : formatHkd(card.annualFeeHkd), numeric: true },
+  { label: t.facts.waiver, value: card.annualFeeWaiver?.[lang] ?? null },
+  { label: t.facts.income, value: income, numeric: true },
+  { label: t.facts.earn, value: card.earnRate?.[lang] ?? null },
+  { label: t.facts.welcome, value: card.welcomeOffer?.[lang] ?? null },
+  { label: t.facts.apr, value: card.interestRateApr },
+  { label: t.facts.foreign, value: card.foreignTxnFee },
+  { label: t.facts.updated, value: card.updatedAt },
+  { label: t.facts.source, value: card.sourceNote[lang] },
+  { label: t.facts.status, value: card.status === "published" ? t.facts.published : t.facts.placeholder },
+];
+---
+
+<dl class="spec-grid">
+  {
+    rows.map((row) => (
+      <div>
+        <dt>{row.label}</dt>
+        <dd>
+          <Term value={row.value} placeholder={t.placeholder} title={t.placeholderTitle} numeric={row.numeric} />
+        </dd>
+      </div>
+    ))
+  }
+</dl>
