@@ -2,7 +2,7 @@ import type { Messages } from "./zh-hant";
 
 export const zhHans = {
   banner: "卡条款核对于 2026-11-25 的银行官方专页及收费表。空白栏请以银行官网为准，不代表零。申请链接尚未开放。",
-  copyBadge: "Mia",
+copyBadge: "Mia",
   placeholder: "请参阅银行官网",
   placeholderTitle: "这项以银行官网最新公布为准。",
   a11y: {

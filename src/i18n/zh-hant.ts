@@ -2,7 +2,7 @@ import type { Audience, ClaimStatus, IncomePeriod, Network, RewardType } from ".
 
 export const zhHant = {
   banner: "卡條款核對於 2026-11-25 的銀行官方專頁及收費表。空白欄請以銀行官網為準，不代表零。申請連結尚未開放。",
-  copyBadge: "Mia",
+copyBadge: "Mia",
   placeholder: "請參閱銀行官網",
   placeholderTitle: "這項以銀行官網最新公布為準。",
   a11y: {
