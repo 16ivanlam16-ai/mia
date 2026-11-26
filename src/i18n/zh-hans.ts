@@ -1,10 +1,10 @@
 import type { Messages } from "./zh-hant";
 
 export const zhHans = {
-  banner: "卡条款来自 2026-11-25 对照官方专页及 KFS 的矩阵。空白栏是待补，不是零。申请链接尚未启用。",
+  banner: "卡条款核对于 2026-11-25 的银行官方专页及收费表。空白栏请以银行官网为准，不代表零。申请链接尚未开放。",
   copyBadge: "文案占位",
-  placeholder: "待补",
-  placeholderTitle: "待市场部卡片矩阵填入。此栏不是零，也不是现行优惠。",
+  placeholder: "请参阅银行官网",
+  placeholderTitle: "这项以银行官网最新公布为准。",
   a11y: {
     skip: "跳到主要内容",
     home: "Mia 首页",
@@ -36,7 +36,7 @@ export const zhHans = {
     affiliate: "申请链接若日后开通，Mia 可能获得介绍费。表格不按介绍费排序。",
     entityPending: "运营法律实体名称尚未设置。",
     rights: "版权所有。",
-    placeholderNote: "标示「待补」的字段，会在市场部卡片矩阵导入后才有内容。",
+    placeholderNote: "条款以银行最新公布为准。",
     source: "源代码",
     staticSite: "静态页面，在构建时生成。",
   },
@@ -107,10 +107,10 @@ export const zhHans = {
     count: "显示 {shown} / {total}",
     empty: "没有符合的卡片。清除筛选，或等待已发布数据导入。",
     clear: "清除筛选",
-    caption: "信用卡结构比较。待补表示该栏尚未由市场部矩阵填入，不是零。",
+    caption: "信用卡比较。未列出的项目请参阅银行官网，不代表零。",
     noscript: "筛选需要 JavaScript。未启用时会显示全部卡片。",
     matrixVersion: "版本",
-    matrixUpdated: "矩阵日期",
+    matrixUpdated: "核对日期",
     matrixNone: "未有日期",
   },
   facts: {

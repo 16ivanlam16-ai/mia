@@ -1,10 +1,10 @@
 import type { Audience, ClaimStatus, IncomePeriod, Network, RewardType } from "../lib/taxonomy";
 
 export const zhHant = {
-  banner: "卡條款來自 2026-11-25 對照官方專頁及 KFS 的矩陣。空白欄是待補，不是零。申請連結尚未啟用。",
+  banner: "卡條款核對於 2026-11-25 的銀行官方專頁及收費表。空白欄請以銀行官網為準，不代表零。申請連結尚未開放。",
   copyBadge: "文案佔位",
-  placeholder: "待補",
-  placeholderTitle: "待市場部卡片矩陣填入。此欄不是零，也不是現行優惠。",
+  placeholder: "請參閱銀行官網",
+  placeholderTitle: "這項以銀行官網最新公布為準。",
   a11y: {
     skip: "跳至主要內容",
     home: "Mia 首頁",
@@ -36,7 +36,7 @@ export const zhHant = {
     affiliate: "申請連結若日後開通，Mia 可能獲得介紹費。表格不按介紹費排序。",
     entityPending: "營運法律實體名稱尚未設定。",
     rights: "版權所有。",
-    placeholderNote: "標示「待補」的欄位，會在市場部卡片矩陣匯入後才有內容。",
+    placeholderNote: "條款以銀行最新公布為準。",
     source: "原始碼",
     staticSite: "靜態頁面，於建置時產生。",
   },
@@ -107,10 +107,10 @@ export const zhHant = {
     count: "顯示 {shown} / {total}",
     empty: "沒有符合的卡片。清除篩選，或等待已發佈資料匯入。",
     clear: "清除篩選",
-    caption: "信用卡結構比較。待補表示該欄尚未由市場部矩陣填入，不是零。",
+    caption: "信用卡比較。未列出的項目請參閱銀行官網，不代表零。",
     noscript: "篩選需要 JavaScript。未啟用時會顯示全部卡片。",
     matrixVersion: "版本",
-    matrixUpdated: "矩陣日期",
+    matrixUpdated: "核對日期",
     matrixNone: "未有日期",
   },
   facts: {

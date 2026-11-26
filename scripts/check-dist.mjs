@@ -93,8 +93,8 @@ for (const [file, html] of htmlByFile) {
 
 const hantCompare = [...htmlByFile.entries()].find(([file]) => file.endsWith(`${join("zh-hant", "compare", "index.html")}`));
 const hansCompare = [...htmlByFile.entries()].find(([file]) => file.endsWith(`${join("zh-hans", "compare", "index.html")}`));
-if (!hantCompare || !hantCompare[1].includes("待補")) errors.push("Traditional compare page is missing 待補");
-if (!hansCompare || !hansCompare[1].includes("待补")) errors.push("Simplified compare page is missing 待补");
+if (!hantCompare || !hantCompare[1].includes("請參閱銀行官網")) errors.push("Traditional compare page is missing the unknown-value phrase");
+if (!hansCompare || !hansCompare[1].includes("请参阅银行官网")) errors.push("Simplified compare page is missing the unknown-value phrase");
 
 const sitemap = files.filter((file) => file.includes("sitemap") && file.endsWith(".xml"));
 if (sitemap.length === 0) errors.push("sitemap xml is missing");
