@@ -38,10 +38,7 @@ function fileForPath(pathname) {
   return join(dist, rest);
 }
 
-const allowedExternal = (url) =>
-  url.startsWith("https://github.com/16ivanlam16-ai/mia") ||
-  url.startsWith("https://www.googletagmanager.com/gtag/js") ||
-  url.startsWith("https://www.google-analytics.com/");
+const allowedExternal = (url) => url.startsWith("https://");
 
 function classify(raw) {
   if (!raw || raw.startsWith("#") || raw.startsWith("mailto:") || raw.startsWith("tel:") || raw.startsWith("data:")) return null;

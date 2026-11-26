@@ -1,7 +1,7 @@
 import type { Audience, ClaimStatus, IncomePeriod, Network, RewardType } from "../lib/taxonomy";
 
 export const zhHant = {
-  banner: "預覽站：版面與流程已就緒。年費、回贈、迎新、利率等卡條款仍是佔位，網站不會顯示任何銀行的現行優惠。",
+  banner: "卡條款來自 2026-11-25 對照官方專頁及 KFS 的矩陣。空白欄是待補，不是零。申請連結尚未啟用。",
   copyBadge: "文案佔位",
   placeholder: "待補",
   placeholderTitle: "待市場部卡片矩陣填入。此欄不是零，也不是現行優惠。",
@@ -54,8 +54,8 @@ export const zhHant = {
     backCard: "返回這張卡",
   },
   seo: {
-    home: "Mia 把香港信用卡排在同一張表上，給本地居民與經高才通、IANG、優才來港的人。條款數字尚未上載。",
-    compare: "篩選信用卡結構。年費、回贈、迎新與利率等待市場部矩陣，現時標示為待補。",
+    home: "Mia 把香港信用卡排在同一張表上，給本地居民與經高才通、IANG、優才來港的人。條款於 2026-11-25 對照官方專頁。",
+    compare: "篩選香港信用卡的年費、入息、簽賬獎賞與迎新。空白欄是待補。資料核對日期 2026-11-25。",
     guides: "抵港、第一張卡，以及怎樣閱讀比較表。正文仍是佔位大綱。",
     claims: "用參考編號查看回贈狀態。現時只有示範紀錄，金額留空。",
     about: "Mia 是香港信用卡比較與資訊站，以聯盟模式運作。這裡說明我們做與不做的事。",
@@ -69,7 +69,7 @@ export const zhHant = {
   home: {
     eyebrow: "香港 · 信用卡資訊",
     title: "一張表，看清信用卡選擇",
-    lede: "Mia 把信用卡條件排在同一張表上，給香港居民，以及經高才通、IANG 或優才來港的人。正式數字尚未上載。",
+    lede: "Mia 把信用卡條件排在同一張表上，給香港居民，以及經高才通、IANG 或優才來港的人。表內數字來自 2026-11-25 的官方核對。",
     principlesTitle: "這站怎樣幫忙",
     principles: [
       { title: "同一張表", text: "年費、入息、獎賞同迎新用同一組欄位。數字未到之前，欄位會標明待補，不會用零或估算出來的利率充數。" },

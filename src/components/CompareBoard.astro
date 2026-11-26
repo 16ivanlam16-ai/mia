@@ -118,12 +118,12 @@ function income(card: Card): string | null {
                 </a>
                 <span class="issuer">{card.issuerName[lang]}</span>
               </th>
-              <td>{card.rewardType ? t.reward[card.rewardType] : <Term value={null} placeholder={t.placeholder} title={t.placeholderTitle} />}</td>
-              <td>{card.audiences.map((item) => t.audience[item]).join(" · ")}</td>
-              <td><Term value={card.annualFeeHkd === null ? null : formatHkd(card.annualFeeHkd)} placeholder={t.placeholder} title={t.placeholderTitle} numeric /></td>
-              <td><Term value={income(card)} placeholder={t.placeholder} title={t.placeholderTitle} numeric /></td>
-              <td><Term value={card.earnRate?.[lang] ?? null} placeholder={t.placeholder} title={t.placeholderTitle} /></td>
-              <td><Term value={card.welcomeOffer?.[lang] ?? null} placeholder={t.placeholder} title={t.placeholderTitle} /></td>
+              <td class="tight">{card.rewardType ? t.reward[card.rewardType] : <Term value={null} placeholder={t.placeholder} title={t.placeholderTitle} />}</td>
+              <td class="tight">{card.audiences.map((item) => t.audience[item]).join(" · ")}</td>
+              <td class="tight"><Term value={card.annualFeeHkd === null ? null : formatHkd(card.annualFeeHkd)} placeholder={t.placeholder} title={t.placeholderTitle} numeric /></td>
+              <td class="tight"><Term value={income(card)} placeholder={t.placeholder} title={t.placeholderTitle} numeric /></td>
+              <td class="clip"><Term value={card.earnRate?.[lang] ?? null} placeholder={t.placeholder} title={t.placeholderTitle} /></td>
+              <td class="clip"><Term value={card.welcomeOffer?.[lang] ?? null} placeholder={t.placeholder} title={t.placeholderTitle} /></td>
               <td>
                 <a class="btn btn-secondary" href={goPath(card.id, { channel: "site", post: "compare", lang })} data-astro-prefetch="false">
                   {card.applyUrl ? t.cta.applyReady : t.cta.applyPending}
