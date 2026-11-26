@@ -16,16 +16,16 @@
     "official": true
   },
   "sc-cathay-mastercard": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.sc.com/content/dam/sc/hk/en/credit-cards/hk-cc-cxam-jan26-600x600-en.png",
+    "official": true
   },
   "sc-simply-cash-visa": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.sc.com/content/dam/sc/hk/en/credit-cards/hk-sc-simply-cash.png",
+    "official": true
   },
   "sc-smart-card": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.sc.com/content/dam/sc/hk/en/credit-cards/hk-cc-cat-sc-600-600-en.jpg",
+    "official": true
   },
   "amex-explorer": {
     "sourceUrl": "https://icm.aexp-static.com/Internet/internationalcardshop/en_hk/images/cards/explorer_emb_hk_480x304.png",
@@ -44,44 +44,44 @@
     "official": true
   },
   "citi-premiermiles": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.citibank.com.hk/en/credit-cards/images/Citi_PremierMiles_Card.png",
+    "official": true
   },
   "citi-prestige": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.citibank.com.hk/en/credit-cards/images/Citi_Prestige_Card.png",
+    "official": true
   },
   "citi-cash-back": {
-    "sourceUrl": "https://www.citibank.com.hk/en/credit-cards/cards-assets/images/cashback-card/sticky-cardface.png",
+    "sourceUrl": "https://www.citibank.com.hk/en/credit-cards/images/Citi_Cash_Back_Card.png",
     "official": true
   },
   "citi-octopus": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.citibank.com.hk/en/credit-cards/images/Citi_Octopus_Platinum_Card.png",
+    "official": true
   },
   "citi-hktvmall": {
-    "sourceUrl": "https://www.citibank.com.hk/english/credit-cards/hktvmall/images/hktvmalls.png",
+    "sourceUrl": "https://www.citibank.com.hk/en/credit-cards/images/Citi_HKTVmall_Card.png",
     "official": true
   },
   "mox-credit": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.mox.com/asset/media/Mox_Credit_Socialshare_White_03_TC.png",
+    "official": true
   },
   "primecredit-wewa-visa-signature": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.wewacard.com/wp-content/uploads/2025/06/WeWa_VS.png",
+    "official": true
   },
   "primecredit-earnmore-unionpay": {
     "sourceUrl": null,
     "official": false
   },
   "hangseng-travel-plus": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.hangseng.com/content/dam/wpb/hase/rwd/personal/cards/images/2025/dec/card_travel+_20251219_1260x840_e.jpg",
+    "official": true
   },
   "hangseng-mmpower": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.hangseng.com/content/dam/wpb/hase/banner/2026/mar/PWS_MMPower_20260320_1024x545_en.png",
+    "official": true
   },
   "ccb-eye-plus-visa-signature": {
     "sourceUrl": "https://www.asia.ccb.com/hongkong_tc/personal/credit_cards/images/eye_credit_card/vs_cf_new.png",
@@ -92,8 +92,8 @@
     "official": true
   },
   "fubon-in-shopback-visa-platinum": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.fubonbank.com.hk/resources/common/images/cards/credit-card-products/cc-inshopbackcard01.jpg",
+    "official": true
   },
   "bochk-chill-world-mastercard": {
     "sourceUrl": "https://www.bochk.com/dam/boccreditcard/chillcard/images/cardface_world.png",
@@ -104,20 +104,20 @@
     "official": true
   },
   "bochk-cheers-visa-infinite": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.bochk.com/dam/boccreditcard/cheerscard/images/VI.png",
+    "official": true
   },
   "bochk-cheers-visa-signature": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.bochk.com/dam/boccreditcard/cheerscard/images/VS.png",
+    "official": true
   },
   "bea-world-mastercard": {
     "sourceUrl": null,
     "official": false
   },
   "bea-goal": {
-    "sourceUrl": null,
-    "official": false
+    "sourceUrl": "https://www.hkbea.com/images/en/credit-card/BeaGoal/EN_1.jpg",
+    "official": true
   },
   "cncbi-motion": {
     "sourceUrl": null,
