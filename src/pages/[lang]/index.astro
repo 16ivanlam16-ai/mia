@@ -2,7 +2,8 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { guides } from "../../content/guides";
 import { messages } from "../../i18n";
-import { loadCards } from "../../lib/cards";
+import { loadCards, loadMatrixMeta } from "../../lib/cards";
+import { features } from "../../lib/features";
 import { serializeJson } from "../../lib/text";
 import { isLang, localePaths, type Lang } from "../../lib/taxonomy";
 import { absoluteUrl, pagePath } from "../../lib/urls";
@@ -15,8 +16,7 @@ const lang = Astro.params.lang as Lang;
 if (!isLang(lang)) throw new Error("Unsupported language");
 const t = messages[lang];
 const cards = loadCards();
-const published = cards.filter((card) => card.status === "published").length;
-const samples = cards.length - published;
+const checkedOn = loadMatrixMeta().updatedAt;
 const home = pagePath(lang);
 const site = Astro.site ?? new URL("https://16ivanlam16-ai.github.io");
 const website = {
@@ -38,16 +38,17 @@ const website = {
       <p class="lede">{t.home.lede}</p>
       <div class="actions">
         <a class="btn btn-primary" href={pagePath(lang, "compare")}>{t.cta.compare}</a>
-        <a class="btn btn-secondary" href={pagePath(lang, "claims")}>{t.cta.claims}</a>
+        <a class="btn btn-secondary" href={pagePath(lang, "about")}>{t.cta.about}</a>
+        {features.claims && <a class="btn btn-secondary" href={pagePath(lang, "claims")}>{t.cta.claims}</a>}
       </div>
       <dl class="stats">
         <div>
-          <dt>{t.home.statSamples}</dt>
-          <dd>{samples}</dd>
+          <dt>{t.home.statCards}</dt>
+          <dd>{cards.length}</dd>
         </div>
         <div>
-          <dt>{t.home.statPublished}</dt>
-          <dd>{published}</dd>
+          <dt>{t.home.statChecked}</dt>
+          <dd>{checkedOn ?? t.compare.matrixNone}</dd>
         </div>
         <div>
           <dt>{t.home.statLanguages}</dt>
@@ -59,8 +60,8 @@ const website = {
       <div class="specimen-back"></div>
       <div class="specimen">
         <div class="specimen-top">
-          <span>{t.card.eyebrowPlaceholder}</span>
-          <span class="mark">SAMPLE</span>
+          <span>{t.home.eyebrow}</span>
+          <span class="mark">MIA</span>
         </div>
         <div class="specimen-rows">
           <div>
@@ -109,35 +110,43 @@ const website = {
     </ul>
   </section>
 
-  <section class="wrap section">
-    <div class="section-head">
-      <h2>{t.home.guidesTitle}</h2>
-      <a href={pagePath(lang, "guides")}>{t.cta.allGuides}</a>
-    </div>
-    <p class="note">{t.home.guidesLede}</p>
-    <ul class="guide-grid">
-      {
-        guides.map((guide) => (
-          <li>
-            <a class="panel panel-link" href={pagePath(lang, `guides/${guide.slug}`)}>
-              <h3>{guide.title[lang]}</h3>
-              <p>{guide.description[lang]}</p>
-              <span>{t.guides.read}</span>
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+  {
+    features.guides && (
+      <section class="wrap section">
+        <div class="section-head">
+          <h2>{t.home.guidesTitle}</h2>
+          <a href={pagePath(lang, "guides")}>{t.cta.allGuides}</a>
+        </div>
+        <p class="note">{t.home.guidesLede}</p>
+        <ul class="guide-grid">
+          {
+            guides.map((guide) => (
+              <li>
+                <a class="panel panel-link" href={pagePath(lang, `guides/${guide.slug}`)}>
+                  <h3>{guide.title[lang]}</h3>
+                  <p>{guide.description[lang]}</p>
+                  <span>{t.guides.read}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    )
+  }
 
-  <section class="wrap section split">
-    <div class="panel">
-      <h2>{t.home.claimsTitle}</h2>
-      <p>{t.home.claimsLede}</p>
-      <div class="actions">
-        <a class="btn btn-primary" href={pagePath(lang, "claims")}>{t.cta.claims}</a>
-      </div>
-    </div>
+  <section class:list={["wrap", "section", { split: features.claims }]}>
+    {
+      features.claims && (
+        <div class="panel">
+          <h2>{t.home.claimsTitle}</h2>
+          <p>{t.home.claimsLede}</p>
+          <div class="actions">
+            <a class="btn btn-primary" href={pagePath(lang, "claims")}>{t.cta.claims}</a>
+          </div>
+        </div>
+      )
+    }
     <div class="panel panel-ink">
       <h2>{t.home.trustTitle}</h2>
       <p>{t.home.trustBody}</p>

@@ -32,7 +32,7 @@ const home = pagePath(lang);
     <h1>{doc.title}</h1>
     <p class="draft-banner">{t.legal.draft}</p>
     <p class="meta-line">{t.legal.draftDate}</p>
-    <p>{profile.legalEntityName ? fill(t.legal.entity, { name: profile.legalEntityName }) : t.legal.entityPending}</p>
+    {profile.legalEntityName && <p>{fill(t.legal.entity, { name: profile.legalEntityName })}</p>}
     <p class="lede">{doc.intro}</p>
     {
       doc.sections.map((section) => (

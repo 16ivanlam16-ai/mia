@@ -101,6 +101,13 @@ if (sitemap.length === 0) errors.push("sitemap xml is missing");
 const sitemapText = sitemap.map((file) => readFileSync(file, "utf8")).join("\n");
 if (!sitemapText.includes("/zh-hant/") || !sitemapText.includes("/zh-hans/")) errors.push("sitemap is missing a locale");
 if (sitemapText.includes("/go/")) errors.push("sitemap includes /go/ redirect pages");
+const featureSource = readFileSync(new URL("../src/lib/features.ts", import.meta.url), "utf8");
+const claimsOn = /claims:\s*true/.test(featureSource);
+const guidesOn = /guides:\s*true/.test(featureSource);
+if (!claimsOn && sitemapText.includes("/claims/")) errors.push("sitemap includes the hidden claim tracker");
+if (claimsOn && !sitemapText.includes("/claims/")) errors.push("sitemap is missing the claim tracker");
+if (!guidesOn && sitemapText.includes("/guides/")) errors.push("sitemap includes hidden guide pages");
+if (guidesOn && !sitemapText.includes("/guides/")) errors.push("sitemap is missing guide pages");
 
 const robots = join(dist, "robots.txt");
 if (!existsSync(robots) || !readFileSync(robots, "utf8").includes("Sitemap:")) errors.push("robots.txt is missing a sitemap line");

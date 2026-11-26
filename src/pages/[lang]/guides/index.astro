@@ -3,10 +3,12 @@ import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { guides } from "../../../content/guides";
 import { messages } from "../../../i18n";
+import { features } from "../../../lib/features";
 import { isLang, localePaths, type Lang } from "../../../lib/taxonomy";
 import { pagePath } from "../../../lib/urls";
 
 export function getStaticPaths() {
+  if (!features.guides) return [];
   return localePaths();
 }
 
@@ -34,7 +36,6 @@ const t = messages[lang];
         guides.map((guide) => (
           <li>
             <a class="panel panel-link" href={pagePath(lang, `guides/${guide.slug}`)}>
-              <p class="tag">{t.copyBadge}</p>
               <h2>{guide.title[lang]}</h2>
               <p>{guide.description[lang]}</p>
               <span>{t.guides.read}</span>

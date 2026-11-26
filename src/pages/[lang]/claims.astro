@@ -4,18 +4,19 @@ import ClaimCard from "../../components/ClaimCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { messages } from "../../i18n";
 import { loadClaims } from "../../lib/claims";
+import { features } from "../../lib/features";
 import { isLang, localePaths, type Lang } from "../../lib/taxonomy";
 import { pagePath } from "../../lib/urls";
 
 export function getStaticPaths() {
+  if (!features.claims) return [];
   return localePaths();
 }
 
 const lang = Astro.params.lang as Lang;
 if (!isLang(lang)) throw new Error("Unsupported language");
 const t = messages[lang];
-const claims = loadClaims();
-const samples = claims.filter((claim) => claim.isSample);
+const claims = loadClaims().filter((claim) => !claim.isSample);
 ---
 
 <BaseLayout lang={lang} title={t.claims.title} description={t.seo.claims} path="claims">
@@ -55,20 +56,6 @@ const samples = claims.filter((claim) => claim.isSample);
       </div>
     </form>
     <div class="claim-result" data-claim-result hidden aria-live="polite"></div>
-    <h2>{t.claims.samplesTitle}</h2>
-    <p class="note">{t.claims.samplesHelp}</p>
-    <ul class="sample-refs">
-      {
-        samples.map((claim) => (
-          <li>
-            <button type="button" data-sample-ref={claim.reference}>
-              {claim.reference}
-            </button>
-            <span class={`status status-${claim.status}`}>{t.status[claim.status]}</span>
-          </li>
-        ))
-      }
-    </ul>
     <p class="note">{t.claims.privacy}</p>
     <noscript><p class="note">{t.claims.noscript}</p></noscript>
     <div class="claim-store" data-claim-store>

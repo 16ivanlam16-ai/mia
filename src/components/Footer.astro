@@ -1,6 +1,7 @@
 ---
 import type { Messages } from "../i18n";
 import { guides } from "../content/guides";
+import { features } from "../lib/features";
 import { loadProfile } from "../lib/profile";
 import type { Lang } from "../lib/taxonomy";
 import { pagePath } from "../lib/urls";
@@ -31,25 +32,36 @@ const links = {
       <a class="wordmark" href={pagePath(lang)}>Mia</a>
       <p>{t.footer.tagline}</p>
       <p>{t.footer.affiliate}</p>
-      <p>{profile.legalEntityName ?? t.footer.entityPending}</p>
+      {profile.legalEntityName && <p>{profile.legalEntityName}</p>}
+      {(profile.social.instagram || profile.social.xiaohongshu) && (
+        <ul class="social-links">
+          {profile.social.instagram && (
+            <li><a href={profile.social.instagram}>{t.channel.ig}</a></li>
+          )}
+          {profile.social.xiaohongshu && (
+            <li><a href={profile.social.xiaohongshu}>{t.channel.xhs}</a></li>
+          )}
+        </ul>
+      )}
     </div>
     <div>
       <h2>{t.footer.product}</h2>
       <ul>
         <li><a href={links.compare}>{t.nav.compare}</a></li>
-        <li><a href={links.claims}>{t.nav.claims}</a></li>
-        <li><a href={links.guides}>{t.nav.guides}</a></li>
+        {features.claims && <li><a href={links.claims}>{t.nav.claims}</a></li>}
+        {features.guides && <li><a href={links.guides}>{t.nav.guides}</a></li>}
       </ul>
     </div>
     <div>
-      <h2>{t.footer.learn}</h2>
+      <h2>{features.guides ? t.footer.learn : t.footer.company}</h2>
       <ul>
         {
-          guides.map((guide) => (
-            <li>
-              <a href={pagePath(lang, `guides/${guide.slug}`)}>{guide.title[lang]}</a>
-            </li>
-          ))
+          features.guides &&
+            guides.map((guide) => (
+              <li>
+                <a href={pagePath(lang, `guides/${guide.slug}`)}>{guide.title[lang]}</a>
+              </li>
+            ))
         }
         <li><a href={links.about}>{t.nav.about}</a></li>
         <li><a href={links.contact}>{t.nav.contact}</a></li>
@@ -68,11 +80,6 @@ const links = {
   <div class="wrap legal-line">
     <p>© {year} Mia. {t.footer.rights}</p>
     <p>{t.footer.placeholderNote}</p>
-    <p>
-      {t.footer.staticSite}
-      {" · "}
-      <a href="https://github.com/16ivanlam16-ai/mia">{t.footer.source}</a>
-    </p>
     {profile.contactEmail && <p><a href={`mailto:${profile.contactEmail}`}>{profile.contactEmail}</a></p>}
   </div>
 </footer>
