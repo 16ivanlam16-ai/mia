@@ -1417,7 +1417,7 @@ body.has-compare-tray {
 }
 
 .vs-best-label {
-  display: inline-block;
+  display: block;
   margin-bottom: 0.25rem;
   color: var(--teal-ink);
   font-size: 0.75rem;
