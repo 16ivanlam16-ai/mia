@@ -1,0 +1,185 @@
+---
+import CompareKit from "../../../components/CompareKit.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { messages } from "../../../i18n";
+import { isLang, localePaths, type Lang } from "../../../lib/taxonomy";
+import { pagePath } from "../../../lib/urls";
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const lang = Astro.params.lang as Lang;
+if (!isLang(lang)) throw new Error("Unsupported language");
+const t = messages[lang];
+---
+
+<BaseLayout lang={lang} title={t.compare.vsTitle} description={t.compare.vsLede} path="compare/vs">
+  <div class="wrap">
+    <header class="page-hero">
+      <Breadcrumbs
+        label={t.a11y.breadcrumb}
+        items={[
+          { label: t.nav.home, href: pagePath(lang) },
+          { label: t.compare.title, href: pagePath(lang, "compare") },
+          { label: t.compare.vsTitle },
+        ]}
+      />
+      <p class="eyebrow">{t.compare.eyebrow}</p>
+      <h1>{t.compare.vsTitle}</h1>
+      <p class="lede">{t.compare.vsLede}</p>
+      <label class="check">
+        <input type="checkbox" data-vs-diff />
+        {t.compare.diffOnly}
+      </label>
+    </header>
+    <div class="vs-scroll" data-vs-root></div>
+  </div>
+  <CompareKit lang={lang} />
+  <script is:inline>
+    (function () {
+      var root = document.querySelector("[data-vs-root]");
+      var kit = window.__miaCompare;
+      if (!root || !kit) return;
+      var labels = kit.labels;
+      var ids = kit.read();
+      if (ids.length < 2) {
+        var note = document.createElement("p");
+        note.className = "note";
+        note.textContent = labels.needTwo;
+        root.append(note);
+        return;
+      }
+      kit.track("compare_view", ids);
+
+      function textOf(card, key) {
+        if (key === "fee") return card.feeText || labels.placeholder;
+        if (key === "waiver") return card.waiver || labels.placeholder;
+        if (key === "income") return card.incomeText || labels.placeholder;
+        if (key === "earn") return card.earn || labels.placeholder;
+        if (key === "mile") return card.miles ? (card.earn || labels.placeholder) : labels.notMiles;
+        if (key === "welcome") return card.welcome || labels.placeholder;
+        if (key === "fx") return card.fx || labels.placeholder;
+        if (key === "apr") return card.apr || labels.placeholder;
+        if (key === "updated") return card.updated || labels.placeholder;
+        return "";
+      }
+      function firstNumber(value) {
+        if (!value) return null;
+        var match = String(value).match(/(\d+(?:\.\d+)?)/);
+        return match ? Number(match[1]) : null;
+      }
+      function maxPercent(value) {
+        if (!value) return null;
+        var found = String(value).match(/(\d+(?:\.\d+)?)%/g);
+        if (!found) return null;
+        return Math.max.apply(null, found.map(function (item) { return Number(item.replace("%", "")); }));
+      }
+      var rows = [
+        { key: "fee", label: labels.fee, best: "low", numeric: true },
+        { key: "waiver", label: labels.waiver },
+        { key: "income", label: labels.income },
+        { key: "earn", label: labels.earn, best: "high-percent" },
+        { key: "mile", label: labels.mile },
+        { key: "welcome", label: labels.welcome },
+        { key: "fx", label: labels.fx, best: "low-number" },
+        { key: "apr", label: labels.apr, best: "low-number" },
+        { key: "updated", label: labels.updated },
+        { key: "apply", label: labels.apply },
+      ];
+      var table = document.createElement("table");
+      table.className = "vs-table";
+      var head = document.createElement("tr");
+      var corner = document.createElement("th");
+      corner.className = "sticky-label";
+      corner.textContent = labels.fee ? "" : "";
+      head.append(corner);
+      ids.forEach(function (id) {
+        var card = kit.byId[id];
+        var th = document.createElement("th");
+        var img = document.createElement("img");
+        img.src = card.image;
+        img.alt = card.name;
+        img.width = 794;
+        img.height = 500;
+        var name = document.createElement("span");
+        name.className = "vs-name";
+        name.textContent = card.name;
+        var issuer = document.createElement("span");
+        issuer.className = "issuer";
+        issuer.textContent = card.issuer;
+        th.append(img, name, issuer);
+        head.append(th);
+      });
+      table.append(head);
+
+      rows.forEach(function (row) {
+        var tr = document.createElement("tr");
+        tr.setAttribute("data-vs-row", row.key);
+        var label = document.createElement("th");
+        label.className = "sticky-label";
+        label.scope = "row";
+        label.textContent = row.label;
+        tr.append(label);
+        var values = ids.map(function (id) { return textOf(kit.byId[id], row.key); });
+        var same = row.key !== "apply" && values.every(function (value) { return value === values[0]; });
+        tr.setAttribute("data-same", same ? "true" : "false");
+        var scores = ids.map(function (id) {
+          var card = kit.byId[id];
+          if (row.best === "low") return card.fee;
+          if (row.best === "low-number") return firstNumber(row.key === "fx" ? card.fx : card.apr);
+          if (row.best === "high-percent") return maxPercent(card.earn);
+          return null;
+        });
+        var present = scores.filter(function (score) { return typeof score === "number"; });
+        var target = null;
+        if (present.length >= 2 && !same) {
+          target = row.best === "high-percent" ? Math.max.apply(null, present) : Math.min.apply(null, present);
+          if (present.every(function (score) { return score === present[0]; })) target = null;
+        }
+        ids.forEach(function (id, index) {
+          var card = kit.byId[id];
+          var td = document.createElement("td");
+          if (row.key === "updated") {
+            td.textContent = textOf(card, row.key);
+            if (card.sourceHref) {
+              var link = document.createElement("a");
+              link.href = card.sourceHref;
+              link.rel = "noopener noreferrer";
+              link.textContent = card.sourceText || card.sourceHref;
+              td.append(document.createElement("br"), link);
+            }
+          } else if (row.key === "apply") {
+            var apply = document.createElement("a");
+            apply.className = "btn btn-primary";
+            apply.href = card.apply;
+            apply.textContent = labels.applyLabel;
+            td.append(apply);
+          } else {
+            td.textContent = textOf(card, row.key);
+          }
+          if (target !== null && scores[index] === target) {
+            td.className = "vs-best";
+            var mark = document.createElement("span");
+            mark.className = "vs-best-label";
+            mark.textContent = labels.best;
+            td.prepend(mark);
+          }
+          tr.append(td);
+        });
+        table.append(tr);
+      });
+      root.append(table);
+
+      var diff = document.querySelector("[data-vs-diff]");
+      if (diff) {
+        diff.addEventListener("change", function () {
+          root.querySelectorAll("[data-same='true']").forEach(function (row) {
+            row.hidden = diff.checked;
+          });
+        });
+      }
+    })();
+  </script>
+</BaseLayout>

@@ -141,6 +141,9 @@ function income(card: Card): string | null {
                 <a class="btn btn-secondary" href={goPath(card.id, { channel: "site", post: "compare", lang })} data-astro-prefetch="false">
                   {card.applyUrl ? t.cta.applyReady : t.cta.applyPending}
                 </a>
+                <button class="btn btn-secondary compare-toggle" type="button" data-compare-toggle={card.id} aria-pressed="false">
+                  {t.compare.add}
+                </button>
               </td>
             </tr>
           ))
@@ -195,6 +198,9 @@ function income(card: Card): string | null {
           <a class="btn btn-secondary" href={goPath(card.id, { channel: "site", post: "compare", lang })} data-astro-prefetch="false">
             {card.applyUrl ? t.cta.applyReady : t.cta.applyPending}
           </a>
+          <button class="btn btn-secondary compare-toggle" type="button" data-compare-toggle={card.id} aria-pressed="false">
+            {t.compare.add}
+          </button>
         </article>
       ))
     }

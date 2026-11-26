@@ -1284,6 +1284,161 @@ html[data-go-lang="zh-hans"] [data-go-panel="zh-hant"] {
   }
 }
 
+.compare-toggle {
+  margin-top: 0.45rem;
+}
+
+.compare-tray {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  background: #fffcf7;
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -8px 24px rgba(26, 24, 20, 0.08);
+  padding: 0.55rem 0.8rem calc(0.55rem + env(safe-area-inset-bottom));
+}
+
+.compare-limit {
+  margin: 0 0 0.4rem;
+  color: var(--teal-ink);
+  font-weight: 700;
+}
+
+.compare-tray-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.compare-picks {
+  display: flex;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.compare-picks li {
+  flex: none;
+  width: 4.75rem;
+}
+
+.compare-picks img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1.586 / 1;
+  object-fit: contain;
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.compare-remove,
+.compare-tray .btn,
+.compare-toggle {
+  min-height: 44px;
+}
+
+.compare-remove {
+  width: 100%;
+  margin-top: 0.2rem;
+  border: 0;
+  background: transparent;
+  color: var(--teal-ink);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.compare-tray-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex: none;
+}
+
+.compare-tray .btn[aria-disabled="true"] {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+body.has-compare-tray {
+  padding-bottom: 7.5rem;
+}
+
+.vs-scroll {
+  width: 100%;
+  overflow-x: auto;
+  max-width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.vs-table {
+  border-collapse: collapse;
+  min-width: 100%;
+}
+
+.vs-table th,
+.vs-table td {
+  vertical-align: top;
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-elev);
+  min-width: 11rem;
+}
+
+.vs-table .sticky-label {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 7.5rem;
+  background: #f7f4ee;
+  box-shadow: 1px 0 0 var(--line);
+}
+
+.vs-table img {
+  width: min(100%, 12rem);
+  height: auto;
+  aspect-ratio: 1.586 / 1;
+  object-fit: contain;
+}
+
+.vs-name {
+  display: block;
+  margin-top: 0.45rem;
+  font-weight: 700;
+}
+
+.vs-best {
+  background: #e7f3f1;
+}
+
+.vs-best-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--teal-ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.vs-table .btn {
+  min-height: 44px;
+}
+
+@media (max-width: 760px) {
+  .compare-tray-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .compare-tray-actions .btn {
+    width: 100%;
+  }
+}
+
 @media print {
   .preview-banner,
   .site-header,

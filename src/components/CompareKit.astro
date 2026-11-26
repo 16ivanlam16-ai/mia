@@ -1,0 +1,188 @@
+---
+import { messages } from "../i18n";
+import { loadCards } from "../lib/cards";
+import { cardImageFile } from "../lib/card-images";
+import { formatHkd } from "../lib/format";
+import { sourceParts } from "../lib/source-link";
+import type { Lang } from "../lib/taxonomy";
+import { goPath, pagePath } from "../lib/urls";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = messages[lang];
+const vs = pagePath(lang, "compare/vs");
+const catalog = loadCards()
+  .filter((card) => card.status === "published")
+  .map((card) => {
+    const link = sourceParts(card.sourceNote[lang]).find((part) => part.kind === "link");
+    const income =
+      card.minIncomeHkd === null
+        ? null
+        : card.minIncomePeriod
+          ? `${formatHkd(card.minIncomeHkd)} / ${t.incomePeriod[card.minIncomePeriod]}`
+          : formatHkd(card.minIncomeHkd);
+    return {
+      id: card.id,
+      name: card.productName[lang],
+      issuer: card.issuerName[lang],
+      image: `${import.meta.env.BASE_URL}${cardImageFile(card.id)}`,
+      fee: card.annualFeeHkd,
+      feeText: card.annualFeeHkd === null ? null : formatHkd(card.annualFeeHkd),
+      waiver: card.annualFeeWaiver?.[lang] ?? null,
+      income: card.minIncomeHkd,
+      incomeText: income,
+      earn: card.earnRate?.[lang] ?? null,
+      welcome: card.welcomeOffer?.[lang] ?? null,
+      fx: card.foreignTxnFee,
+      apr: card.interestRateApr,
+      updated: card.updatedAt,
+      sourceHref: link && link.kind === "link" ? link.href : null,
+      sourceText: link && link.kind === "link" ? link.text : null,
+      miles: card.rewardType === "miles",
+      apply: goPath(card.id, { channel: "site", post: "compare-vs", lang }),
+    };
+  });
+const labels = {
+  add: t.compare.add,
+  added: t.compare.added,
+  limit: t.compare.limit,
+  clearAll: t.compare.clearAll,
+  open: t.compare.open,
+  remove: t.compare.remove,
+  best: t.compare.best,
+  needTwo: t.compare.needTwo,
+  notMiles: t.compare.notMiles,
+  placeholder: t.placeholder,
+  fee: t.facts.annualFee,
+  waiver: t.facts.waiver,
+  income: t.facts.income,
+  earn: t.facts.earn,
+  mile: t.compare.mile,
+  welcome: t.facts.welcome,
+  fx: t.facts.foreign,
+  apr: t.facts.apr,
+  updated: t.facts.updated,
+  apply: t.card.applyTitle,
+  applyLabel: t.cta.applyPending,
+};
+---
+
+<aside class="compare-tray" data-compare-tray hidden>
+  <p class="compare-limit" data-compare-limit hidden></p>
+  <div class="compare-tray-row">
+    <ul class="compare-picks" data-compare-picks></ul>
+    <div class="compare-tray-actions">
+      <button class="btn btn-secondary" type="button" data-compare-clear>{t.compare.clearAll}</button>
+      <a class="btn btn-primary" data-compare-open aria-disabled="true" href={vs}>{t.compare.open}</a>
+    </div>
+  </div>
+</aside>
+<script is:inline define:vars={{ catalog, labels, vs }}>
+  (function () {
+    var KEY = "mia.compare";
+    var byId = {};
+    catalog.forEach(function (card) { byId[card.id] = card; });
+    var tray = document.querySelector("[data-compare-tray]");
+    var picks = document.querySelector("[data-compare-picks]");
+    var limitNote = document.querySelector("[data-compare-limit]");
+    var open = document.querySelector("[data-compare-open]");
+    var clear = document.querySelector("[data-compare-clear]");
+    if (!tray || !picks || !open) return;
+
+    function read() {
+      try {
+        var parsed = JSON.parse(localStorage.getItem(KEY) || "[]");
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter(function (id) { return byId[id]; }).slice(0, 3);
+      } catch (error) {
+        return [];
+      }
+    }
+    function write(ids) {
+      try { localStorage.setItem(KEY, JSON.stringify(ids)); } catch (error) {}
+    }
+    function track(name, ids, extra) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      var payload = { cards: ids.join(",") };
+      if (extra) payload.card_id = extra;
+      window.gtag("event", name, payload);
+    }
+    function paint() {
+      var ids = read();
+      picks.replaceChildren();
+      ids.forEach(function (id) {
+        var card = byId[id];
+        var item = document.createElement("li");
+        var img = document.createElement("img");
+        img.src = card.image;
+        img.alt = card.name;
+        img.width = 794;
+        img.height = 500;
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "compare-remove";
+        button.textContent = labels.remove;
+        button.setAttribute("aria-label", labels.remove + " " + card.name);
+        button.addEventListener("click", function () {
+          write(read().filter(function (itemId) { return itemId !== id; }));
+          paint();
+        });
+        item.append(img, button);
+        picks.append(item);
+      });
+      document.querySelectorAll("[data-compare-toggle]").forEach(function (button) {
+        var on = ids.indexOf(button.getAttribute("data-compare-toggle")) !== -1;
+        button.setAttribute("aria-pressed", on ? "true" : "false");
+        button.textContent = on ? labels.added : labels.add;
+      });
+      var ready = ids.length >= 2;
+      tray.hidden = ids.length === 0;
+      document.body.classList.toggle("has-compare-tray", ids.length > 0);
+      open.setAttribute("aria-disabled", ready ? "false" : "true");
+      open.href = ready ? vs + "?cards=" + encodeURIComponent(ids.join(",")) : vs;
+    }
+    document.querySelectorAll("[data-compare-toggle]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var id = button.getAttribute("data-compare-toggle");
+        if (!id || !byId[id]) return;
+        var ids = read();
+        var index = ids.indexOf(id);
+        if (index !== -1) {
+          ids.splice(index, 1);
+        } else if (ids.length >= 3) {
+          if (limitNote) {
+            limitNote.textContent = labels.limit;
+            limitNote.hidden = false;
+          }
+          return;
+        } else {
+          ids.push(id);
+          track("compare_add", ids, id);
+          if (limitNote) limitNote.hidden = true;
+        }
+        write(ids);
+        paint();
+      });
+    });
+    if (clear) {
+      clear.addEventListener("click", function () {
+        write([]);
+        if (limitNote) limitNote.hidden = true;
+        paint();
+      });
+    }
+    open.addEventListener("click", function (event) {
+      if (open.getAttribute("aria-disabled") === "true") event.preventDefault();
+    });
+    var params = new URLSearchParams(location.search);
+    if (location.pathname.indexOf("/compare/vs") !== -1 && params.get("cards")) {
+      var fromUrl = params.get("cards").split(",").map(function (id) { return id.trim(); }).filter(function (id) { return byId[id]; }).slice(0, 3);
+      write(fromUrl);
+    }
+    paint();
+    window.__miaCompare = { read: read, byId: byId, labels: labels, track: track };
+  })();
+</script>

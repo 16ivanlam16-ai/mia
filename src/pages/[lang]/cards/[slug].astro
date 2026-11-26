@@ -1,4 +1,5 @@
 ---
+import CompareKit from "../../../components/CompareKit.astro";
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import CardFace from "../../../components/CardFace.astro";
 import CardFacts from "../../../components/CardFacts.astro";
@@ -83,6 +84,9 @@ const apply = goPath(card.id, { channel: "site", post: "card", lang });
           {card.applyUrl ? t.cta.applyReady : t.cta.applyPending}
         </a>
         <a class="btn btn-secondary" href={pagePath(lang, "compare")}>{t.cta.backCompare}</a>
+        <button class="btn btn-secondary compare-toggle" type="button" data-compare-toggle={card.id} aria-pressed="false">
+          {t.compare.add}
+        </button>
       </div>
     </section>
 
@@ -106,4 +110,5 @@ const apply = goPath(card.id, { channel: "site", post: "card", lang });
       </div>
     </section>
   </article>
+  <CompareKit lang={lang} />
 </BaseLayout>
