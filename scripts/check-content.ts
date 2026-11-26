@@ -124,12 +124,12 @@ for (const slug of legalSlugs) {
 }
 
 const privacy = JSON.stringify(legalDocs.privacy);
-for (const token of ["mia.outboundClicks", "affiliate_outbound", "Google Analytics", "PUBLIC_GA_MEASUREMENT_ID", "/go/"]) {
-  if (!privacy.includes(token)) fail(`privacy draft is missing ${token}`);
+for (const token of ["Google Analytics", "瀏覽器", "浏览器"]) {
+  if (!privacy.includes(token)) fail(`privacy page is missing ${token}`);
 }
 const affiliate = JSON.stringify(legalDocs["affiliate-disclosure"]);
-for (const token of ["channel", "post", "Creatory", "Futu"]) {
-  if (!affiliate.includes(token)) fail(`affiliate draft is missing ${token}`);
+for (const token of ["介紹費", "介绍费"]) {
+  if (!affiliate.includes(token)) fail(`affiliate page is missing ${token}`);
 }
 
 try {

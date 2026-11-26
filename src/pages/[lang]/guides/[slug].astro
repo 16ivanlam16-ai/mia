@@ -3,10 +3,12 @@ import Breadcrumbs from "../../../components/Breadcrumbs.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { guides, type Guide } from "../../../content/guides";
 import { messages } from "../../../i18n";
+import { features } from "../../../lib/features";
 import { LANGS, type Lang } from "../../../lib/taxonomy";
 import { pagePath } from "../../../lib/urls";
 
 export function getStaticPaths() {
+  if (!features.guides) return [];
   return LANGS.flatMap((lang) =>
     guides.map((guide) => ({
       params: { lang, slug: guide.slug },
@@ -37,8 +39,7 @@ const others = guides.filter((item) => item.slug !== guide.slug);
     <p class="eyebrow">{t.guides.eyebrow}</p>
     <h1>{guide.title[lang]}</h1>
     <p class="lede">{guide.description[lang]}</p>
-    <div class="copy-pending">
-      <p class="tag">{t.copyBadge}</p>
+    <div>
       {
         guide.sections.map((section) => (
           <section>

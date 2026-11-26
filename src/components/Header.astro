@@ -1,5 +1,6 @@
 ---
 import type { Messages } from "../i18n";
+import { features } from "../lib/features";
 import type { Lang } from "../lib/taxonomy";
 import { pagePath } from "../lib/urls";
 
@@ -17,8 +18,8 @@ interface Props {
 const { lang, path, current, t } = Astro.props;
 const items: Item[] = [
   { key: "compare", href: pagePath(lang, "compare"), label: t.nav.compare },
-  { key: "guides", href: pagePath(lang, "guides"), label: t.nav.guides },
-  { key: "claims", href: pagePath(lang, "claims"), label: t.nav.claims },
+  ...(features.guides ? [{ key: "guides", href: pagePath(lang, "guides"), label: t.nav.guides }] : []),
+  ...(features.claims ? [{ key: "claims", href: pagePath(lang, "claims"), label: t.nav.claims }] : []),
   { key: "about", href: pagePath(lang, "about"), label: t.nav.about },
   { key: "contact", href: pagePath(lang, "contact"), label: t.nav.contact },
 ];

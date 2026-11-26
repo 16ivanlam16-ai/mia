@@ -46,6 +46,8 @@ function income(card: Card): string | null {
 ---
 
 <div class="compare-board" data-compare data-total={cards.length} data-count-template={t.compare.count}>
+  <details class="filter-drawer">
+  <summary>{t.compare.filters}</summary>
   <form class="filters" data-compare-form>
     <div class="field field-grow">
       <label for="q">{t.compare.searchLabel}</label>
@@ -73,16 +75,21 @@ function income(card: Card): string | null {
       </select>
     </div>
   <div class="filter-bar">
-    <label class="check">
-      <input name="live" type="checkbox" />
-      {t.compare.liveOnly}
-    </label>
+    {
+      cards.some((card) => card.status === "placeholder") && (
+        <label class="check">
+          <input name="live" type="checkbox" />
+          {t.compare.liveOnly}
+        </label>
+      )
+    }
     <button class="btn btn-secondary" type="button" data-clear>{t.compare.clear}</button>
     <p class="count">
       <span data-compare-count>{fill(t.compare.count, { shown: cards.length, total: cards.length })}</span>
     </p>
   </div>
   </form>
+  </details>
   <noscript><p class="note">{t.compare.noscript}</p></noscript>
   <p class="empty" data-compare-empty hidden>{t.compare.empty}</p>
 

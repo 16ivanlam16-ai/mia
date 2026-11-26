@@ -25,7 +25,7 @@ def og() -> None:
     sub = ImageFont.truetype(CJK, 54)
     draw.text((92, 330), "香港信用卡比較", font=sub, fill=INK)
     note = ImageFont.truetype(CJK, 32)
-    draw.text((92, 420), "條款待補  ·  繁 / 简", font=note, fill=TEAL)
+    draw.text((92, 420), "繁體  ·  简体", font=note, fill=TEAL)
     image.save(PUBLIC / "og.png", optimize=True)
 
 

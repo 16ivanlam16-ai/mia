@@ -112,39 +112,12 @@ const canonical = goPath(card.id, {}, import.meta.env.BASE_URL);
               </p>
               <p class="note">{t.go.recorded}</p>
             </div>
-            <div class="panel">
-              <dl class="spec-grid">
-                <div>
-                  <dt>{t.go.fields.card}</dt>
-                  <dd data-go-field="card">{card.id}</dd>
-                </div>
-                <div>
-                  <dt>{t.go.fields.channel}</dt>
-                  <dd data-go-field="channel">{t.go.channelDirect}</dd>
-                </div>
-                <div>
-                  <dt>{t.go.fields.post}</dt>
-                  <dd data-go-field="post">{t.go.noPost}</dd>
-                </div>
-                <div>
-                  <dt>{t.go.fields.dest}</dt>
-                  <dd data-go-field="dest">{dest || t.go.destPending}</dd>
-                </div>
-              </dl>
-            </div>
           </div>
           <Footer lang={lang} t={t} />
         </div>
       );
     })
   }
-  <!--
-    Static click log. GitHub Pages cannot append a server log.
-    This page records to localStorage (mia.outboundClicks), queues an
-    affiliate_outbound event for GA4, and sendBeacons only when
-    PUBLIC_CLICK_WEBHOOK_URL was present at build time.
-    The destination comes from the card matrix, never from the query string.
-  -->
   <script is:inline>
     (function () {
       var root = document.getElementById("go-root");

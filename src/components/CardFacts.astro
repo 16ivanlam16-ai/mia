@@ -31,7 +31,6 @@ const rows: { label: string; value: string | null; numeric?: boolean; wide?: boo
   { label: t.facts.foreign, value: card.foreignTxnFee },
   { label: t.facts.updated, value: card.updatedAt },
   { label: t.facts.source, value: card.sourceNote[lang], wide: true, source: true },
-  { label: t.facts.status, value: card.status === "published" ? t.facts.published : t.facts.placeholder },
 ];
 ---
 

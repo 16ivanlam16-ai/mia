@@ -521,7 +521,7 @@ a:hover {
 
 .matrix-card {
   display: grid;
-  grid-template-columns: 1.4fr repeat(2, auto);
+  grid-template-columns: 1fr auto;
   gap: 0.8rem 1.2rem;
   align-items: end;
   margin: 1rem 0;
@@ -535,6 +535,10 @@ a:hover {
   color: var(--ink-soft);
   font-size: 0.78rem;
   font-weight: 700;
+}
+
+.filter-drawer > summary {
+  display: none;
 }
 
 .filters {
@@ -979,7 +983,7 @@ code {
 
 .go-grid {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: minmax(0, 40rem);
   gap: 1rem;
   align-items: start;
   padding-bottom: 2rem;
@@ -1091,7 +1095,11 @@ html[data-go-lang="zh-hans"] [data-go-panel="zh-hant"] {
   .go-grid,
   .footer-grid,
   .matrix-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero > * {
+    min-width: 0;
   }
 
   .specimen-stage {
@@ -1115,6 +1123,27 @@ html[data-go-lang="zh-hans"] [data-go-panel="zh-hant"] {
 @media (max-width: 799px) {
   .desktop-nav {
     display: none;
+  }
+
+  .wordmark,
+  .nav-toggle,
+  .langs a {
+    min-height: 44px;
+  }
+
+  .nav-toggle,
+  .langs a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    padding-inline: 0.85rem;
+  }
+
+  .mobile-panel a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
   }
 
   .bar-end {
@@ -1144,9 +1173,43 @@ html[data-go-lang="zh-hans"] [data-go-panel="zh-hant"] {
   }
 }
 
+@media (min-width: 761px) {
+  .filter-drawer > .filters {
+    display: grid !important;
+  }
+}
+
 @media (max-width: 760px) {
   .only-desktop {
     display: none;
+  }
+
+  .filter-drawer > summary {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    margin-bottom: 0.75rem;
+    padding: 0 0.95rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--bg-elev);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .filter-drawer > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions .btn,
+  .inline-form .btn {
+    width: 100%;
   }
 
   .deal-list {
