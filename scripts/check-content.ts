@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { legalDocs, legalSlugs } from "../src/content/legal";
 import { guides } from "../src/content/guides";
@@ -7,6 +7,7 @@ import { zhHant } from "../src/i18n/zh-hant";
 import { resolveGaId, resolveGsc, resolveWebhook } from "../src/lib/analytics-policy";
 import { parseCsv, rowsFromCsv, stripCsvComments } from "../src/lib/csv";
 import { loadCards } from "../src/lib/cards";
+import { loadCardImages } from "../src/lib/card-images";
 import { loadClaims } from "../src/lib/claims";
 import { loadMatrixMeta } from "../src/lib/cards";
 import { loadProfile } from "../src/lib/profile";
@@ -134,6 +135,12 @@ for (const token of ["介紹費", "介绍费"]) {
 
 try {
   const cards = loadCards();
+  const images = loadCardImages();
+  for (const card of cards) {
+    if (card.status !== "published") continue;
+    if (!existsSync(join("public", "cards", `${card.id}.webp`))) fail(`${card.id}: missing public/cards/${card.id}.webp`);
+    if (!images[card.id]) fail(`${card.id}: missing image manifest row`);
+  }
   const claims = loadClaims();
   loadMatrixMeta();
   loadProfile();

@@ -1,4 +1,5 @@
 ---
+import CardFace from "./CardFace.astro";
 import Term from "./Term.astro";
 import type { Card } from "../lib/cards";
 import { formatHkd } from "../lib/format";
@@ -120,10 +121,15 @@ function income(card: Card): string | null {
               data-text={searchText(card)}
             >
               <th scope="row">
-                <a class="card-name" href={pagePath(lang, `cards/${card.id}`)}>
-                  {card.productName[lang]}
-                </a>
-                <span class="issuer">{card.issuerName[lang]}</span>
+                <span class="name-row">
+                  <CardFace id={card.id} name={card.productName[lang]} size="sm" />
+                  <span>
+                    <a class="card-name" href={pagePath(lang, `cards/${card.id}`)}>
+                      {card.productName[lang]}
+                    </a>
+                    <span class="issuer">{card.issuerName[lang]}</span>
+                  </span>
+                </span>
               </th>
               <td class="tight">{card.rewardType ? t.reward[card.rewardType] : <Term value={null} placeholder={t.placeholder} title={t.placeholderTitle} />}</td>
               <td class="tight">{card.audiences.map((item) => t.audience[item]).join(" · ")}</td>
@@ -155,6 +161,7 @@ function income(card: Card): string | null {
           data-audiences={card.audiences.join(" ")}
           data-text={searchText(card)}
         >
+          <CardFace id={card.id} name={card.productName[lang]} size="md" />
           <h2>
             <a href={pagePath(lang, `cards/${card.id}`)}>{card.productName[lang]}</a>
           </h2>

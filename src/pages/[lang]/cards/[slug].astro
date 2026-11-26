@@ -1,5 +1,6 @@
 ---
 import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import CardFace from "../../../components/CardFace.astro";
 import CardFacts from "../../../components/CardFacts.astro";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import type { Card } from "../../../lib/cards";
@@ -43,6 +44,7 @@ const apply = goPath(card.id, { channel: "site", post: "card", lang });
           { label: card.productName[lang] },
         ]}
       />
+      <CardFace id={card.id} name={card.productName[lang]} size="lg" loading="eager" />
       <p class="eyebrow">{card.status === "published" ? t.card.eyebrowPublished : t.card.eyebrowPlaceholder}</p>
       <h1>{card.productName[lang]}</h1>
       <p class="lede">{card.issuerName[lang]}</p>

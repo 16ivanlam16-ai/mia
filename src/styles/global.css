@@ -663,8 +663,8 @@ table.compare th[scope="row"] {
   position: sticky;
   left: 0;
   z-index: 1;
-  min-width: 11rem;
-  max-width: 15rem;
+  min-width: 16rem;
+  max-width: 20rem;
   box-shadow: 1px 0 0 var(--line);
 }
 
@@ -691,6 +691,36 @@ table.compare tr:last-child th[scope="row"] {
 table.compare tbody tr:hover td,
 table.compare tbody tr:hover th[scope="row"] {
   background: #fbf8f3;
+}
+
+.card-face {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1.586 / 1;
+  object-fit: contain;
+  background: transparent;
+  border-radius: 12px;
+}
+
+.card-face-sm {
+  width: 4.5rem;
+  flex: none;
+}
+
+.card-face-md {
+  width: min(100%, 16rem);
+}
+
+.card-face-lg {
+  width: min(100%, 26rem);
+  margin: 0.4rem 0 1rem;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
 }
 
 .card-name {
