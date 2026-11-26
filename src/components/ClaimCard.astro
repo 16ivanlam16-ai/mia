@@ -1,0 +1,78 @@
+---
+import Term from "./Term.astro";
+import type { Claim } from "../lib/claims";
+import { cardById } from "../lib/cards";
+import { formatHkd } from "../lib/format";
+import type { Messages } from "../i18n";
+import type { Lang } from "../lib/taxonomy";
+import { pagePath } from "../lib/urls";
+
+interface Props {
+  claim: Claim;
+  lang: Lang;
+  t: Messages;
+}
+const { claim, lang, t } = Astro.props;
+const card = cardById(claim.cardId);
+const channel = t.channel[claim.channel as keyof typeof t.channel] ?? (claim.channel || t.channel.direct);
+---
+
+<article class="claim-card" data-reference={claim.reference}>
+  {claim.isSample && <p class="tag">{t.claims.sampleFlag}</p>}
+  <dl class="spec-grid">
+    <div>
+      <dt>{t.claims.fields.reference}</dt>
+      <dd><code>{claim.reference}</code></dd>
+    </div>
+    <div>
+      <dt>{t.claims.fields.alias}</dt>
+      <dd>{claim.applicantAlias}</dd>
+    </div>
+    <div>
+      <dt>{t.claims.fields.card}</dt>
+      <dd>
+        {card ? <a href={pagePath(lang, `cards/${card.id}`)}>{card.productName[lang]}</a> : claim.cardId}
+      </dd>
+    </div>
+    <div>
+      <dt>{t.claims.fields.submitted}</dt>
+      <dd><time datetime={claim.submittedAt}>{claim.submittedAt}</time></dd>
+    </div>
+    <div>
+      <dt>{t.claims.fields.channel}</dt>
+      <dd>{channel}</dd>
+    </div>
+    <div>
+      <dt>{t.claims.fields.post}</dt>
+      <dd>{claim.post || t.go.noPost}</dd>
+    </div>
+    <div>
+      <dt>{t.claims.fields.status}</dt>
+      <dd><span class={`status status-${claim.status}`}>{t.status[claim.status]}</span></dd>
+    </div>
+    <div>
+      <dt>{t.claims.fields.reward}</dt>
+      <dd>
+        <Term
+          value={claim.rewardAmountHkd === null ? null : formatHkd(claim.rewardAmountHkd)}
+          placeholder={t.placeholder}
+          title={t.placeholderTitle}
+          numeric
+        />
+      </dd>
+    </div>
+  </dl>
+  <h3>{t.claims.fields.note}</h3>
+  {claim.rewardNote[lang] ? <p>{claim.rewardNote[lang]}</p> : <Term value={null} placeholder={t.placeholder} title={t.placeholderTitle} />}
+  <h3>{t.claims.history}</h3>
+  <ol class="timeline">
+    {
+      claim.history.map((item) => (
+        <li>
+          <strong>{t.status[item.status]}</strong>
+          <time datetime={item.at}>{item.at}</time>
+        </li>
+      ))
+    }
+  </ol>
+</article>

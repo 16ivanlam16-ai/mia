@@ -1,0 +1,60 @@
+---
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { guides, type Guide } from "../../../content/guides";
+import { messages } from "../../../i18n";
+import { LANGS, type Lang } from "../../../lib/taxonomy";
+import { pagePath } from "../../../lib/urls";
+
+export function getStaticPaths() {
+  return LANGS.flatMap((lang) =>
+    guides.map((guide) => ({
+      params: { lang, slug: guide.slug },
+      props: { guide },
+    })),
+  );
+}
+
+interface Props {
+  guide: Guide;
+}
+const { guide } = Astro.props;
+const lang = Astro.params.lang as Lang;
+const t = messages[lang];
+const others = guides.filter((item) => item.slug !== guide.slug);
+---
+
+<BaseLayout lang={lang} title={guide.title[lang]} description={guide.description[lang]} path={`guides/${guide.slug}`}>
+  <article class="wrap prose">
+    <Breadcrumbs
+      label={t.a11y.breadcrumb}
+      items={[
+        { label: t.nav.home, href: pagePath(lang) },
+        { label: t.guides.title, href: pagePath(lang, "guides") },
+        { label: guide.title[lang] },
+      ]}
+    />
+    <p class="eyebrow">{t.guides.eyebrow}</p>
+    <h1>{guide.title[lang]}</h1>
+    <p class="lede">{guide.description[lang]}</p>
+    <div class="copy-pending">
+      <p class="tag">{t.copyBadge}</p>
+      {
+        guide.sections.map((section) => (
+          <section>
+            <h2>{section.heading[lang]}</h2>
+            {section.paragraphs[lang].map((paragraph) => <p>{paragraph}</p>)}
+          </section>
+        ))
+      }
+    </div>
+    <div class="actions">
+      <a class="btn btn-primary" href={pagePath(lang, "compare")}>{t.cta.compare}</a>
+      <a class="btn btn-secondary" href={pagePath(lang, "guides")}>{t.cta.allGuides}</a>
+    </div>
+    <h2>{t.cta.allGuides}</h2>
+    <ul class="plain-list">
+      {others.map((item) => <li><a href={pagePath(lang, `guides/${item.slug}`)}>{item.title[lang]}</a></li>)}
+    </ul>
+  </article>
+</BaseLayout>

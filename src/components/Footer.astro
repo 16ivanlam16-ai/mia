@@ -1,0 +1,78 @@
+---
+import type { Messages } from "../i18n";
+import { guides } from "../content/guides";
+import { loadProfile } from "../lib/profile";
+import type { Lang } from "../lib/taxonomy";
+import { pagePath } from "../lib/urls";
+
+interface Props {
+  lang: Lang;
+  t: Messages;
+}
+const { lang, t } = Astro.props;
+const profile = loadProfile();
+const year = new Date().getFullYear();
+const links = {
+  compare: pagePath(lang, "compare"),
+  guides: pagePath(lang, "guides"),
+  claims: pagePath(lang, "claims"),
+  about: pagePath(lang, "about"),
+  contact: pagePath(lang, "contact"),
+  privacy: pagePath(lang, "privacy"),
+  terms: pagePath(lang, "terms"),
+  affiliate: pagePath(lang, "affiliate-disclosure"),
+  advice: pagePath(lang, "not-financial-advice"),
+};
+---
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <a class="wordmark" href={pagePath(lang)}>Mia</a>
+      <p>{t.footer.tagline}</p>
+      <p>{t.footer.affiliate}</p>
+      <p>{profile.legalEntityName ?? t.footer.entityPending}</p>
+    </div>
+    <div>
+      <h2>{t.footer.product}</h2>
+      <ul>
+        <li><a href={links.compare}>{t.nav.compare}</a></li>
+        <li><a href={links.claims}>{t.nav.claims}</a></li>
+        <li><a href={links.guides}>{t.nav.guides}</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>{t.footer.learn}</h2>
+      <ul>
+        {
+          guides.map((guide) => (
+            <li>
+              <a href={pagePath(lang, `guides/${guide.slug}`)}>{guide.title[lang]}</a>
+            </li>
+          ))
+        }
+        <li><a href={links.about}>{t.nav.about}</a></li>
+        <li><a href={links.contact}>{t.nav.contact}</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>{t.footer.legal}</h2>
+      <ul>
+        <li><a href={links.privacy}>{t.legalNav.privacy}</a></li>
+        <li><a href={links.terms}>{t.legalNav.terms}</a></li>
+        <li><a href={links.affiliate}>{t.legalNav.affiliate}</a></li>
+        <li><a href={links.advice}>{t.legalNav.advice}</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap legal-line">
+    <p>© {year} Mia. {t.footer.rights}</p>
+    <p>{t.footer.placeholderNote}</p>
+    <p>
+      {t.footer.staticSite}
+      {" · "}
+      <a href="https://github.com/16ivanlam16-ai/mia">{t.footer.source}</a>
+    </p>
+    {profile.contactEmail && <p><a href={`mailto:${profile.contactEmail}`}>{profile.contactEmail}</a></p>}
+  </div>
+</footer>

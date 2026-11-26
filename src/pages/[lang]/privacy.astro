@@ -1,0 +1,12 @@
+---
+import LegalArticle from "../../components/LegalArticle.astro";
+import { localePaths, type Lang } from "../../lib/taxonomy";
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const lang = Astro.params.lang as Lang;
+---
+
+<LegalArticle lang={lang} slug="privacy" />

@@ -1,0 +1,102 @@
+---
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import CardFacts from "../../../components/CardFacts.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import type { Card } from "../../../lib/cards";
+import { loadCards } from "../../../lib/cards";
+import { messages } from "../../../i18n";
+import { LANGS, type Lang } from "../../../lib/taxonomy";
+import { goPath, pagePath } from "../../../lib/urls";
+
+export function getStaticPaths() {
+  const cards = loadCards();
+  return LANGS.flatMap((lang) =>
+    cards.map((card) => ({
+      params: { lang, slug: card.id },
+      props: { card },
+    })),
+  );
+}
+
+interface Props {
+  card: Card;
+}
+const { card } = Astro.props;
+const lang = Astro.params.lang as Lang;
+const t = messages[lang];
+const others = loadCards().filter((item) => item.id !== card.id);
+const apply = goPath(card.id, { channel: "site", post: "card", lang });
+const xhs = goPath(card.id, { channel: "xhs", post: "demo", lang });
+const ig = goPath(card.id, { channel: "ig", post: "demo", lang });
+---
+
+<BaseLayout lang={lang} title={card.productName[lang]} description={card.summary[lang]} path={`cards/${card.id}`}>
+  <article class="wrap">
+    <header class="page-hero">
+      <Breadcrumbs
+        label={t.a11y.breadcrumb}
+        items={[
+          { label: t.nav.home, href: pagePath(lang) },
+          { label: t.compare.title, href: pagePath(lang, "compare") },
+          { label: card.productName[lang] },
+        ]}
+      />
+      <p class="eyebrow">{card.status === "published" ? t.card.eyebrowPublished : t.card.eyebrowPlaceholder}</p>
+      <h1>{card.productName[lang]}</h1>
+      <p class="lede">{card.issuerName[lang]}</p>
+      {card.status === "placeholder" && <p class="draft-banner">{t.card.placeholderBanner}</p>}
+    </header>
+
+    <section class="section">
+      <h2>{t.card.summaryTitle}</h2>
+      <div class="copy-pending">
+        <p class="tag">{t.copyBadge}</p>
+        <p>{card.summary[lang]}</p>
+      </div>
+      <h2>{t.card.highlightsTitle}</h2>
+      <ul>
+        {card.highlights[lang].map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>{t.card.factsTitle}</h2>
+      <CardFacts card={card} lang={lang} t={t} />
+      <h3>{t.card.audiencesTitle}</h3>
+      <ul class="audience-list">
+        {card.audiences.map((item) => <li>{t.audience[item]}</li>)}
+      </ul>
+    </section>
+
+    <section class="section panel">
+      <h2>{t.card.applyTitle}</h2>
+      <p>{card.applyUrl ? t.card.applyBodyReady : t.card.applyBodyPending}</p>
+      <div class="actions">
+        <a class={card.applyUrl ? "btn btn-primary" : "btn btn-secondary"} href={apply} data-astro-prefetch="false">
+          {card.applyUrl ? t.cta.applyReady : t.cta.applyPending}
+        </a>
+        <a class="btn btn-secondary" href={pagePath(lang, "compare")}>{t.cta.backCompare}</a>
+      </div>
+      <h3>{t.card.trackingTitle}</h3>
+      <p>{t.card.trackingBody}</p>
+      <p>
+        <a href={xhs} data-astro-prefetch="false">{t.card.exampleXhs}</a>
+        ·
+        <a href={ig} data-astro-prefetch="false">{t.card.exampleIg}</a>
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>{t.card.otherCards}</h2>
+      <ul class="plain-list">
+        {
+          others.map((item) => (
+            <li>
+              <a href={pagePath(lang, `cards/${item.id}`)}>{item.productName[lang]}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </article>
+</BaseLayout>

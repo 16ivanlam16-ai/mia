@@ -1,0 +1,60 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import CompareBoard from "../../components/CompareBoard.astro";
+import PlaceholderValue from "../../components/PlaceholderValue.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { messages } from "../../i18n";
+import { loadCards, loadMatrixMeta } from "../../lib/cards";
+import { isLang, localePaths, type Lang } from "../../lib/taxonomy";
+import { pagePath } from "../../lib/urls";
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const lang = Astro.params.lang as Lang;
+if (!isLang(lang)) throw new Error("Unsupported language");
+const t = messages[lang];
+const meta = loadMatrixMeta();
+const home = pagePath(lang);
+---
+
+<BaseLayout lang={lang} title={t.compare.title} description={t.seo.compare} path="compare">
+  <div class="wrap">
+    <header class="page-hero">
+      <Breadcrumbs
+        label={t.a11y.breadcrumb}
+        items={[
+          { label: t.nav.home, href: home },
+          { label: t.compare.title },
+        ]}
+      />
+      <p class="eyebrow">{t.compare.eyebrow}</p>
+      <h1>{t.compare.title}</h1>
+      <p class="lede">{t.compare.lede}</p>
+      <p class="note">{t.compare.orderNote}</p>
+    </header>
+    <aside class="matrix-card">
+      <div>
+        <p>{meta.sourceLabel[lang]}</p>
+      </div>
+      <div>
+        <p class="label">{t.compare.matrixVersion}</p>
+        <p class="num">{meta.version}</p>
+      </div>
+      <div>
+        <p class="label">{t.compare.matrixUpdated}</p>
+        <p>
+          {
+            meta.updatedAt ? (
+              <time datetime={meta.updatedAt}>{meta.updatedAt}</time>
+            ) : (
+              <PlaceholderValue text={t.placeholder} title={t.placeholderTitle} />
+            )
+          }
+        </p>
+      </div>
+    </aside>
+    <CompareBoard lang={lang} cards={loadCards()} t={t} />
+  </div>
+</BaseLayout>

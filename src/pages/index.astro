@@ -1,0 +1,52 @@
+---
+import { pagePath } from "../lib/urls";
+
+const hant = pagePath("zh-hant");
+const hans = pagePath("zh-hans");
+const icon = `${import.meta.env.BASE_URL}favicon.svg`;
+---
+
+<html lang="zh-Hant-HK">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mia</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href={icon} type="image/svg+xml" />
+    <meta name="mia-base" content={import.meta.env.BASE_URL} />
+  </head>
+  <body class="redirect-fallback" data-hant={hant} data-hans={hans}>
+    <p>Mia</p>
+    <p>
+      <a href={hant}>繁體中文</a>
+      ·
+      <a href={hans}>简体中文</a>
+    </p>
+    <script is:inline>
+      (function () {
+        var root = document.body;
+        var lang = "zh-hant";
+        try {
+          var stored = localStorage.getItem("mia.lang");
+          if (stored === "zh-hans" || stored === "zh-hant") lang = stored;
+        } catch (e) {}
+        location.replace(lang === "zh-hans" ? root.dataset.hans : root.dataset.hant);
+      })();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .redirect-fallback {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.4rem;
+    background: #f4f1ea;
+    color: #1a1814;
+    font-family: Manrope, "PingFang HK", "Microsoft JhengHei", sans-serif;
+  }
+  .redirect-fallback a { color: #0c5c58; }
+</style>

@@ -1,0 +1,10 @@
+---
+interface Props {
+  text: string;
+  title: string;
+  tone?: "default" | "inverse";
+}
+const { text, title, tone = "default" } = Astro.props;
+---
+
+<span class:list={["ph", tone === "inverse" && "ph-inverse"]} title={title}>{text}</span>

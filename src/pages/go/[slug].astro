@@ -1,0 +1,226 @@
+---
+import Footer from "../../components/Footer.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { messages } from "../../i18n";
+import { clickWebhookUrl } from "../../lib/analytics";
+import { loadCards, type Card } from "../../lib/cards";
+import { LANGS } from "../../lib/taxonomy";
+import { goPath, pagePath } from "../../lib/urls";
+
+export function getStaticPaths() {
+  return loadCards().map((card) => ({
+    params: { slug: card.id },
+    props: { card },
+  }));
+}
+
+interface Props {
+  card: Card;
+}
+const { card } = Astro.props;
+const dest = card.applyUrl ?? "";
+const icon = `${import.meta.env.BASE_URL}favicon.svg`;
+const canonical = goPath(card.id, {}, import.meta.env.BASE_URL);
+---
+
+<BaseLayout
+  lang="zh-hant"
+  title={messages["zh-hant"].go.title}
+  description={messages["zh-hant"].go.pendingBody}
+  pageId="go"
+  canonicalPath={canonical}
+  noindex
+  omitAlternates
+  bare
+>
+  <script slot="head" is:inline>
+    (function () {
+      var lang = new URLSearchParams(location.search).get("lang");
+      if (lang === "zh-hans") {
+        document.documentElement.lang = "zh-Hans";
+        document.documentElement.dataset.goLang = "zh-hans";
+      } else {
+        document.documentElement.dataset.goLang = "zh-hant";
+      }
+    })();
+  </script>
+  <noscript>
+    <style>
+      [data-go-panel] { display: block !important; }
+    </style>
+  </noscript>
+  <div id="go-root" data-card={card.id} data-dest={dest} data-webhook={clickWebhookUrl} hidden></div>
+  {
+    LANGS.map((lang) => {
+      const t = messages[lang];
+      return (
+        <div data-go-panel={lang}>
+          <a class="skip-link" href={`#go-${lang}`}>{t.a11y.skip}</a>
+          <div class="preview-banner">
+            <p>{t.banner}</p>
+          </div>
+          <header class="site-header">
+            <div class="wrap bar go-bar">
+              <a class="wordmark" href={pagePath(lang)} aria-label={t.a11y.home}>
+                <img src={icon} width="28" height="28" alt="" />
+                <span>Mia</span>
+              </a>
+              <nav class="langs" aria-label={t.lang.label}>
+                <a
+                  href={goPath(card.id, { lang: "zh-hant" })}
+                  data-go-lang-link
+                  data-base={goPath(card.id, { lang: "zh-hant" })}
+                  hreflang="zh-Hant-HK"
+                  lang="zh-Hant-HK"
+                  aria-current={lang === "zh-hant" ? "true" : undefined}
+                >
+                  {t.lang.hant}
+                </a>
+                <a
+                  href={goPath(card.id, { lang: "zh-hans" })}
+                  data-go-lang-link
+                  data-base={goPath(card.id, { lang: "zh-hans" })}
+                  hreflang="zh-Hans"
+                  lang="zh-Hans"
+                  aria-current={lang === "zh-hans" ? "true" : undefined}
+                >
+                  {t.lang.hans}
+                </a>
+              </nav>
+            </div>
+          </header>
+          <div class="wrap go-grid" id={`go-${lang}`}>
+            <div>
+              {dest ? (
+                <>
+                  <h1>{t.go.readyTitle}</h1>
+                  <p>{t.go.readyBody}</p>
+                  <p>
+                    <a class="btn btn-primary go-continue" href={dest} rel="noopener">
+                      {t.go.continue}
+                    </a>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h1>{t.go.pendingTitle}</h1>
+                  <p>{t.go.pendingBody}</p>
+                </>
+              )}
+              <p>
+                <a href={pagePath(lang, `cards/${card.id}`)}>{t.go.back}</a>
+              </p>
+              <p class="note">{t.go.recorded}</p>
+            </div>
+            <div class="panel">
+              <dl class="spec-grid">
+                <div>
+                  <dt>{t.go.fields.card}</dt>
+                  <dd data-go-field="card">{card.id}</dd>
+                </div>
+                <div>
+                  <dt>{t.go.fields.channel}</dt>
+                  <dd data-go-field="channel">{t.go.channelDirect}</dd>
+                </div>
+                <div>
+                  <dt>{t.go.fields.post}</dt>
+                  <dd data-go-field="post">{t.go.noPost}</dd>
+                </div>
+                <div>
+                  <dt>{t.go.fields.dest}</dt>
+                  <dd data-go-field="dest">{dest || t.go.destPending}</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          <Footer lang={lang} t={t} />
+        </div>
+      );
+    })
+  }
+  <!--
+    Static click log. GitHub Pages cannot append a server log.
+    This page records to localStorage (mia.outboundClicks), queues an
+    affiliate_outbound event for GA4, and sendBeacons only when
+    PUBLIC_CLICK_WEBHOOK_URL was present at build time.
+    The destination comes from the card matrix, never from the query string.
+  -->
+  <script is:inline>
+    (function () {
+      var root = document.getElementById("go-root");
+      if (!root) return;
+      function clean(value) {
+        if (!value) return "";
+        return String(value).replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 80);
+      }
+      var params = new URLSearchParams(location.search);
+      var channel = clean(params.get("channel"));
+      var post = clean(params.get("post"));
+      var cardId = root.getAttribute("data-card") || "";
+      var destAttr = root.getAttribute("data-dest") || "";
+      var dest = "";
+      try {
+        if (destAttr) {
+          var destUrl = new URL(destAttr, location.origin);
+          var ownGo = destUrl.pathname.indexOf("/go/") !== -1;
+          if ((destUrl.protocol === "https:" || destUrl.protocol === "http:") && !ownGo) dest = destUrl.href;
+        }
+      } catch (error) {}
+      var payload = { card: cardId, channel: channel, post: post, destReady: Boolean(dest), ts: new Date().toISOString() };
+      try {
+        var key = "mia.outboundClicks";
+        var log = [];
+        try { log = JSON.parse(localStorage.getItem(key) || "[]"); } catch (error) { log = []; }
+        if (!Array.isArray(log)) log = [];
+        log.push(payload);
+        localStorage.setItem(key, JSON.stringify(log.slice(-200)));
+      } catch (error) {}
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag("event", "affiliate_outbound", {
+        card_id: cardId,
+        channel: channel || "direct",
+        post: post || "",
+        link_ready: Boolean(dest)
+      });
+      var webhook = root.getAttribute("data-webhook") || "";
+      if (webhook && navigator.sendBeacon) {
+        try {
+          navigator.sendBeacon(webhook, new Blob([JSON.stringify(payload)], { type: "text/plain;charset=UTF-8" }));
+        } catch (error) {}
+      }
+      if (channel) {
+        document.querySelectorAll("[data-go-field='channel']").forEach(function (node) { node.textContent = channel; });
+      }
+      if (post) {
+        document.querySelectorAll("[data-go-field='post']").forEach(function (node) { node.textContent = post; });
+      }
+      if (dest) {
+        document.querySelectorAll(".go-continue").forEach(function (node) { node.setAttribute("href", dest); });
+        window.setTimeout(function () { location.assign(dest); }, 300);
+      }
+      document.querySelectorAll("[data-go-lang-link]").forEach(function (anchor) {
+        anchor.addEventListener("click", function (event) {
+          var base = anchor.getAttribute("data-base");
+          if (!base) return;
+          var next = new URL(base, location.origin);
+          var current = new URLSearchParams(location.search);
+          ["channel", "post"].forEach(function (key) {
+            var value = clean(current.get(key));
+            if (value) next.searchParams.set(key, value);
+          });
+          var lang = next.searchParams.get("lang");
+          if (lang === "zh-hant" || lang === "zh-hans") {
+            try { localStorage.setItem("mia.lang", lang); } catch (error) {}
+          }
+          if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+            anchor.href = next.pathname + next.search;
+            return;
+          }
+          event.preventDefault();
+          location.href = next.pathname + next.search;
+        });
+      });
+    })();
+  </script>
+</BaseLayout>

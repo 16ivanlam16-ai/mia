@@ -1,0 +1,93 @@
+---
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { messages } from "../../i18n";
+import { loadProfile } from "../../lib/profile";
+import { isLang, localePaths, type Lang } from "../../lib/taxonomy";
+import { pagePath } from "../../lib/urls";
+
+export function getStaticPaths() {
+  return localePaths();
+}
+
+const lang = Astro.params.lang as Lang;
+if (!isLang(lang)) throw new Error("Unsupported language");
+const t = messages[lang];
+const email = loadProfile().contactEmail;
+---
+
+<BaseLayout lang={lang} title={t.contact.title} description={t.seo.contact} path="contact">
+  <div class="wrap prose">
+    <Breadcrumbs
+      label={t.a11y.breadcrumb}
+      items={[
+        { label: t.nav.home, href: pagePath(lang) },
+        { label: t.contact.title },
+      ]}
+    />
+    <p class="eyebrow">{t.contact.eyebrow}</p>
+    <h1>{t.contact.title}</h1>
+    <p class="lede">{t.contact.lede}</p>
+    <h2>{t.contact.emailLabel}</h2>
+    {
+      email ? (
+        <p>
+          <a href={`mailto:${email}`}>{email}</a>
+        </p>
+      ) : (
+        <p class="draft-banner">{t.contact.emailMissing}</p>
+      )
+    }
+    <h2>{t.contact.topicsTitle}</h2>
+    <div class="stack">
+      {
+        t.contact.topics.map((topic) => (
+          <section class="topic">
+            <h3>{topic.title}</h3>
+            <p>{topic.text}</p>
+          </section>
+        ))
+      }
+    </div>
+    {
+      email && (
+        <>
+          <h2>{t.contact.formTitle}</h2>
+          <p class="note">{t.contact.formNote}</p>
+          <form data-contact-form data-email={email}>
+            <div class="field">
+              <label for="name">{t.contact.name}</label>
+              <input id="name" name="name" type="text" maxlength="80" autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="topic">{t.contact.topic}</label>
+              <select id="topic" name="topic">
+                {t.contact.topics.map((topic) => <option value={topic.title}>{topic.title}</option>)}
+              </select>
+            </div>
+            <div class="field">
+              <label for="message">{t.contact.message}</label>
+              <textarea id="message" name="message" maxlength="2000" required></textarea>
+            </div>
+            <div class="actions">
+              <button class="btn btn-primary" type="submit">{t.contact.send}</button>
+            </div>
+          </form>
+          <script is:inline>
+            var form = document.querySelector("[data-contact-form]");
+            if (form) {
+              form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                var address = form.getAttribute("data-email") || "";
+                var data = new FormData(form);
+                var subject = "[Mia] " + String(data.get("topic") || "");
+                var body = String(data.get("name") || "") + "\n\n" + String(data.get("message") || "");
+                location.href = "mailto:" + address + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+              });
+            }
+          </script>
+        </>
+      )
+    }
+  </div>
+</BaseLayout>

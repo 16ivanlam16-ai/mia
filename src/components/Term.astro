@@ -1,0 +1,20 @@
+---
+import PlaceholderValue from "./PlaceholderValue.astro";
+
+interface Props {
+  value: string | number | null;
+  placeholder: string;
+  title: string;
+  numeric?: boolean;
+}
+const { value, placeholder, title, numeric = false } = Astro.props;
+const filled = value !== null && value !== "";
+---
+
+{
+  filled ? (
+    numeric ? <span class="num">{value}</span> : <span>{value}</span>
+  ) : (
+    <PlaceholderValue text={placeholder} title={title} />
+  )
+}
