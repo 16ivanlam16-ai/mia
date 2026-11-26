@@ -1,4 +1,8 @@
 {
   "contactEmail": null,
-  "legalEntityName": null
+  "legalEntityName": null,
+  "social": {
+    "instagram": null,
+    "xiaohongshu": null
+  }
 }
