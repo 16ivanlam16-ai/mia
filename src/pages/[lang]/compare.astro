@@ -1,4 +1,5 @@
 ---
+import CompareKit from "../../components/CompareKit.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import CompareBoard from "../../components/CompareBoard.astro";
 import PlaceholderValue from "../../components/PlaceholderValue.astro";
@@ -53,4 +54,5 @@ const home = pagePath(lang);
     </aside>
     <CompareBoard lang={lang} cards={loadCards()} t={t} />
   </div>
+  <CompareKit lang={lang} />
 </BaseLayout>
