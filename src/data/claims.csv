@@ -2,10 +2,11 @@
 # Do not add columns for name, phone, email, or ID number. applicant_alias is a display label.
 # status_history uses status@YYYY-MM-DD joined by |. The last entry must match status.
 # is_sample=true requires a MIA-SAMPLE- reference and a blank reward_amount_hkd.
+# Sample rows point at published card ids. The old sample-* cards were removed with the matrix import.
 # Knowing a reference is enough to read that row on the public site. Treat real references as secrets.
 reference,submitted_at,applicant_alias,card_id,channel,post,status,status_history,reward_note_zh_hant,reward_note_zh_hans,reward_amount_hkd,is_sample
-MIA-SAMPLE-1001,2026-01-08,Sample A,sample-cashback,xhs,demo-xhs-01,under_review,submitted@2026-01-08|under_review@2026-01-12,示範紀錄。金額留空。,示范记录。金额留空。,,true
-MIA-SAMPLE-1002,2026-01-05,Sample B,sample-miles,ig,demo-ig-01,reward_pending,submitted@2026-01-05|approved@2026-01-18|reward_pending@2026-01-25,示範紀錄。回贈待發放，金額仍留空。,示范记录。回赠待发放，金额仍留空。,,true
-MIA-SAMPLE-1003,2026-01-10,Sample C,sample-newcomer,site,claims-demo,needs_info,submitted@2026-01-10|needs_info@2026-01-14,示範紀錄。表示還要補資料，沒有真實客戶。,示范记录。表示还要补资料，没有真实客户。,,true
-MIA-SAMPLE-1004,2025-12-02,Sample D,sample-cashback,partner,demo-partner,reward_paid,submitted@2025-12-02|approved@2025-12-20|reward_pending@2026-01-06|reward_paid@2026-01-20,示範紀錄。狀態是已發放，金額刻意留空。,示范记录。状态是已发放，金额刻意留空。,,true
-MIA-SAMPLE-1005,2026-01-11,Sample E,sample-student,ig,demo-ig-02,rejected,submitted@2026-01-11|rejected@2026-01-19,示範紀錄。未成功，沒有金額。,示范记录。未成功，没有金额。,,true
+MIA-SAMPLE-1001,2026-01-08,Sample A,hsbc-red,xhs,demo-xhs-01,under_review,submitted@2026-01-08|under_review@2026-01-12,示範紀錄。金額留空。,示范记录。金额留空。,,true
+MIA-SAMPLE-1002,2026-01-05,Sample B,hsbc-everymile,ig,demo-ig-01,reward_pending,submitted@2026-01-05|approved@2026-01-18|reward_pending@2026-01-25,示範紀錄。回贈待發放，金額仍留空。,示范记录。回赠待发放，金额仍留空。,,true
+MIA-SAMPLE-1003,2026-01-10,Sample C,citi-hktvmall,site,claims-demo,needs_info,submitted@2026-01-10|needs_info@2026-01-14,示範紀錄。表示還要補資料，沒有真實客戶。,示范记录。表示还要补资料，没有真实客户。,,true
+MIA-SAMPLE-1004,2025-12-02,Sample D,hsbc-red,partner,demo-partner,reward_paid,submitted@2025-12-02|approved@2025-12-20|reward_pending@2026-01-06|reward_paid@2026-01-20,示範紀錄。狀態是已發放，金額刻意留空。,示范记录。状态是已发放，金额刻意留空。,,true
+MIA-SAMPLE-1005,2026-01-11,Sample E,hangseng-mmpower,ig,demo-ig-02,rejected,submitted@2026-01-11|rejected@2026-01-19,示範紀錄。未成功，沒有金額。,示范记录。未成功，没有金额。,,true

@@ -1,0 +1,21 @@
+---
+import { sourceParts } from "../lib/source-link";
+
+interface Props {
+  note: string;
+}
+const { note } = Astro.props;
+const parts = sourceParts(note);
+---
+
+<span class="source-note">
+  {
+    parts.map((part) =>
+      part.kind === "link" ? (
+        <a href={part.href} rel="noopener noreferrer">{part.text}</a>
+      ) : (
+        part.text
+      ),
+    )
+  }
+</span>

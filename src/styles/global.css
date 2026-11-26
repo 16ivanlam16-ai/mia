@@ -622,7 +622,7 @@ textarea {
 table.compare {
   width: 100%;
   border-collapse: collapse;
-  min-width: 860px;
+  min-width: 1180px;
   font-size: 0.95rem;
 }
 
@@ -653,6 +653,30 @@ table.compare th[scope="row"] {
   background: var(--bg-elev);
   font-weight: 500;
   text-align: left;
+}
+
+table.compare th[scope="row"] {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  min-width: 11rem;
+  max-width: 15rem;
+  box-shadow: 1px 0 0 var(--line);
+}
+
+table.compare td.tight {
+  white-space: nowrap;
+}
+
+table.compare td.clip {
+  min-width: 16rem;
+  max-width: 24rem;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+table.compare td .btn {
+  white-space: nowrap;
 }
 
 table.compare tr:last-child td,
@@ -792,6 +816,29 @@ table.compare tbody tr:hover th[scope="row"] {
 
 .spec-grid dd {
   margin: 0.12rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.spec-grid .wide {
+  grid-column: 1 / -1;
+}
+
+.source-note a {
+  overflow-wrap: anywhere;
+}
+
+.issuer-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1rem 1.4rem;
+}
+
+.issuer-groups h3 {
+  margin-bottom: 0.25rem;
+}
+
+.verify-line {
+  margin-top: 0.35rem;
 }
 
 .audience-list,
