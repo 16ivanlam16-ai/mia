@@ -1,0 +1,22 @@
+---
+import { cardImageFile } from "../lib/card-images";
+
+interface Props {
+  id: string;
+  name: string;
+  size?: "sm" | "md" | "lg";
+  loading?: "lazy" | "eager";
+}
+const { id, name, size = "md", loading = "lazy" } = Astro.props;
+const src = `${import.meta.env.BASE_URL}${cardImageFile(id)}`;
+---
+
+<img
+  class:list={["card-face", `card-face-${size}`]}
+  src={src}
+  width="794"
+  height="500"
+  alt={name}
+  loading={loading}
+  decoding="async"
+/>

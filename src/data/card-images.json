@@ -1,0 +1,130 @@
+{
+  "hsbc-everymile": {
+    "sourceUrl": "https://www.hsbc.com.hk/content/dam/hsbc/hk/images/mass/credit-cards/tile-16-9/8520-everymile-card-sky-grey-1600x900.jpg",
+    "official": true
+  },
+  "hsbc-red": {
+    "sourceUrl": "https://www.hsbc.com.hk/content/dam/hsbc/hk/images/mass/credit-cards/tile-16-9/9358-hsbc-red-credit-card-grey-1600x900.jpg",
+    "official": true
+  },
+  "hsbc-visa-signature": {
+    "sourceUrl": "https://www.hsbc.com.hk/content/dam/hsbc/hk/images/mass/credit-cards/tile-16-9/9358-hsbc-visa-signature-card-grey-1600x900.jpg",
+    "official": true
+  },
+  "hsbc-pulse-unionpay-diamond": {
+    "sourceUrl": "https://www.hsbc.com.hk/content/dam/hsbc/hk/images/mass/credit-cards/tile-16-9/9358-hsbc-pulse-unionpay-grey-1600x900.jpg",
+    "official": true
+  },
+  "sc-cathay-mastercard": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "sc-simply-cash-visa": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "sc-smart-card": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "amex-explorer": {
+    "sourceUrl": "https://icm.aexp-static.com/Internet/internationalcardshop/en_hk/images/cards/explorer_emb_hk_480x304.png",
+    "official": true
+  },
+  "dbs-black-world-mastercard": {
+    "sourceUrl": "https://www.dbs.com.hk/iwov-resources/media/images/products/credit-card/square-banner/credit-card-blackmc-684x630-en.jpg",
+    "official": true
+  },
+  "dbs-eminent-card": {
+    "sourceUrl": "https://www.dbs.com.hk/iwov-resources/media/images/products/credit-card/square-banner/card-eminent-vs-card-684x630-en.jpg",
+    "official": true
+  },
+  "dbs-compass-visa": {
+    "sourceUrl": "https://www.dbs.com.hk/iwov-resources/media/images/products/credit-card/square-banner/card-compass-visa-platinum-684x630-en.jpg",
+    "official": true
+  },
+  "citi-premiermiles": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "citi-prestige": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "citi-cash-back": {
+    "sourceUrl": "https://www.citibank.com.hk/en/credit-cards/cards-assets/images/cashback-card/sticky-cardface.png",
+    "official": true
+  },
+  "citi-octopus": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "citi-hktvmall": {
+    "sourceUrl": "https://www.citibank.com.hk/english/credit-cards/hktvmall/images/hktvmalls.png",
+    "official": true
+  },
+  "mox-credit": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "primecredit-wewa-visa-signature": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "primecredit-earnmore-unionpay": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "hangseng-travel-plus": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "hangseng-mmpower": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "ccb-eye-plus-visa-signature": {
+    "sourceUrl": "https://www.asia.ccb.com/hongkong_tc/personal/credit_cards/images/eye_credit_card/vs_cf_new.png",
+    "official": true
+  },
+  "aeon-card-wakuwaku": {
+    "sourceUrl": "https://www.aeon.com.hk/html/assets/cashback-wakuwaku-0322-rgb.png",
+    "official": true
+  },
+  "fubon-in-shopback-visa-platinum": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "bochk-chill-world-mastercard": {
+    "sourceUrl": "https://www.bochk.com/dam/boccreditcard/chillcard/images/cardface_world.png",
+    "official": true
+  },
+  "bochk-chill-platinum-mastercard": {
+    "sourceUrl": "https://www.bochk.com/dam/boccreditcard/chillcard/images/cardface_platinum.png",
+    "official": true
+  },
+  "bochk-cheers-visa-infinite": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "bochk-cheers-visa-signature": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "bea-world-mastercard": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "bea-goal": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "cncbi-motion": {
+    "sourceUrl": null,
+    "official": false
+  },
+  "bochk-bliss": {
+    "sourceUrl": null,
+    "official": false
+  }
+}
